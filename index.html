@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ROCKMAN — تکنولوژی جهانی در دستان شما</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   ROCKMAN — Tesla-inspired dark studio design system + pinned scroll
+   Design tokens lifted from the Model S hero reference.
+   Pure HTML/CSS/JS · RTL · assets: hero-background.png, 01.png, 02.png, logo.png
+   ===================================================================== */
+
+:root{
+  /* ---- surface / ink ---- */
+  --bg-edge:  #050506;
+  --bg-core:  #26262a;          /* centre of the spotlight */
+  --ink:      #ffffff;
+  --muted:    rgba(255,255,255,.60);
+  --faint:    rgba(255,255,255,.34);
+
+  /* ---- glass card ---- */
+  --card:        rgba(255,255,255,.045);
+  --card-border: rgba(255,255,255,.14);
+  --card-blur:   14px;
+
+  /* ---- swatches / accent ---- */
+  --grey: #6e7681;
+  --red:  #e11d2a;
+  --blue: #1f5fd6;
+  --accent: var(--blue);
+
+  --chevron: #8a8a90;
+
+  --ease: cubic-bezier(.22,.61,.24,1);
+  --font-en: "Archivo", system-ui, sans-serif;
+  --font-fa: "Vazirmatn", system-ui, sans-serif;
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+
+body{
+  font-family:var(--font-fa);
+  color:var(--ink);
+  background:var(--bg-edge);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---- Fixed studio background: radial spotlight, near-black edges ---- */
+.bg{
+  position:fixed; inset:0; z-index:0;
+  background:#070708;
+  background-image:
+    radial-gradient(ellipse 68% 62% at 50% 42%, #56565e 0%, #33333a 24%, #17171b 52%, #070708 100%);
+}
+
+/* ============================ PIN =============================
+   Tall track gives scroll distance; .pin stays fixed in view.
+   Scroll progress drives the transition (JS). Nothing scrolls away.
+   ============================================================== */
+.scroll-track{ position:relative; z-index:1; height:500vh; }
+.pin{ position:sticky; top:0; height:100vh; overflow:hidden; }
+.scene{ position:absolute; inset:0; }
+
+/* ============================ NAV ============================ */
+.nav{
+  position:fixed; top:0; left:0; right:0; z-index:40;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:26px clamp(20px,4vw,54px);
+}
+.nav .brand{ font-family:var(--font-en); font-weight:800; font-size:22px; letter-spacing:.42em; color:#fff; }
+.nav .links{
+  position:absolute; left:50%; transform:translateX(-50%);
+  display:flex; align-items:center; gap:20px;
+  font-family:var(--font-fa); font-weight:500; font-size:15px; color:var(--muted);
+}
+.nav .links a{ color:var(--muted); text-decoration:none; transition:color .2s var(--ease); }
+.nav .links a:hover{ color:#fff; }
+.nav .links .dot{ width:4px; height:4px; border-radius:50%; background:var(--faint); }
+.nav .icons{ display:flex; align-items:center; gap:20px; }
+.nav .icons button{
+  background:none; border:0; color:#fff; cursor:pointer; padding:4px; line-height:0;
+  opacity:.9; transition:opacity .2s, transform .2s var(--ease);
+}
+.nav .icons button:hover{ opacity:1; transform:translateY(-1px); }
+.nav .icons svg{ width:22px; height:22px; }
+.nav :focus-visible{ outline:2px solid #fff; outline-offset:3px; border-radius:4px; }
+
+/* ======================= HERO SCENE ========================= */
+.hero-inner{ position:absolute; inset:0; will-change:transform, opacity; }
+
+/* giant word behind the shoe (like MODEL S) */
+.giant{
+  position:absolute; top:32%; left:50%; transform:translate(-50%,-50%);
+  z-index:2; width:min(92vw, 1100px); will-change:transform, opacity;
+}
+.giant .anim{
+  display:block; width:100%; height:auto;
+  filter:brightness(0) invert(1) drop-shadow(0 8px 50px rgba(0,0,0,.5)); /* recolor wordmark to white */
+  opacity:0; transform:translateY(40px) scale(.98);
+}
+.loaded .giant .anim{ animation:rise 1.1s var(--ease) .1s forwards; }
+
+/* the shoe */
+.shoe-wrap{
+  position:absolute; top:45%; left:50%; transform:translate(-50%,-50%);
+  z-index:3; width:min(72vw, 940px); will-change:transform, opacity;
+}
+.shoe{
+  display:block; width:100%; height:auto;
+  filter:drop-shadow(0 40px 46px rgba(0,0,0,.6));
+  opacity:0; transform:translateY(-30px) scale(.97);
+}
+.loaded .shoe{ animation:rise 1.3s var(--ease) .3s forwards; }
+
+/* colour swatches (right, vertically centred) */
+.swatches{
+  position:absolute; top:50%; right:clamp(18px,3.2vw,54px); transform:translateY(-50%);
+  z-index:4; display:flex; flex-direction:column; gap:18px;
+  will-change:opacity;
+}
+.swatch{
+  width:34px; height:34px; border-radius:50%; cursor:pointer; border:2px solid transparent;
+  outline:2px solid transparent; outline-offset:3px; transition:outline-color .2s, transform .2s var(--ease);
+}
+.swatch:hover{ transform:scale(1.08); }
+.swatch[aria-pressed="true"]{ outline-color:#fff; }
+.swatch.g{ background:var(--grey); } .swatch.r{ background:var(--red); } .swatch.b{ background:var(--blue); }
+
+/* product block (name) */
+.product{
+  position:absolute; bottom:15.5%; left:0; right:0; z-index:5;
+  margin-inline:auto; width:max-content; max-width:92vw; text-align:center;
+  will-change:transform, opacity;
+}
+.product-in{ opacity:0; transform:translateY(28px); }
+.loaded .product-in{ animation:rise 1s var(--ease) .8s forwards; }
+.product .name{
+  font-family:var(--font-fa); font-weight:800; direction:rtl;
+  font-size:clamp(24px,3.4vw,46px); line-height:1.3;
+}
+.cta{
+  display:inline-block; margin-top:20px; cursor:pointer; border:0;
+  font-family:var(--font-fa); font-weight:700; font-size:15px; color:#0a0a0a;
+  background:#fff; padding:16px 40px; text-decoration:none;
+  clip-path:polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+  transition:transform .2s var(--ease), background .2s;
+}
+.cta:hover{ transform:translateY(-2px); background:#eaeaea; }
+.cta:focus-visible{ outline:2px solid #fff; outline-offset:3px; }
+
+/* stat cards flanking the bottom */
+.stats{
+  position:absolute; bottom:5%; left:0; right:0; z-index:4;
+  display:flex; justify-content:center; align-items:flex-end; gap:clamp(14px,1.8vw,26px);
+  padding:0 clamp(18px,3.4vw,54px); pointer-events:none; will-change:transform, opacity;
+}
+.stat{
+  min-width:132px; padding:16px 20px; border-radius:16px; text-align:center;
+  background:var(--card); border:1px solid var(--card-border);
+  backdrop-filter:blur(var(--card-blur)); -webkit-backdrop-filter:blur(var(--card-blur));
+  opacity:0; transform:translateY(20px);
+}
+.loaded .stats .stat{ animation:rise .9s var(--ease) 1.1s forwards; }
+.stat b{ display:block; font-family:var(--font-en); font-weight:800; font-size:clamp(22px,2.4vw,30px); direction:ltr; }
+.stat span{ display:block; font-family:var(--font-fa); font-weight:500; color:var(--muted); font-size:13px; margin-top:4px; }
+
+/* ======================= FEATURE SCENE ====================== */
+.feature{
+  display:grid; grid-template-columns:1fr 1fr; align-items:center;
+  gap:40px; padding:110px clamp(24px,6vw,90px); direction:ltr;
+  opacity:0;                     /* revealed by scroll (JS) so it can't bleed through at rest */
+}
+.feature .visual{ position:relative; z-index:1; }
+.feature .visual img{
+  display:block; width:100%; height:auto;
+  filter:drop-shadow(0 34px 44px rgba(0,0,0,.6));
+  opacity:0; transform:translateX(-90px) scale(.95);   /* driven by JS */
+  will-change:transform, opacity;
+}
+.feature .copy{
+  position:relative; z-index:1; padding:42px 44px; border-radius:28px; overflow:hidden;
+  background:linear-gradient(135deg, rgba(255,255,255,.13), rgba(255,255,255,.03) 62%);
+  backdrop-filter:blur(28px) saturate(185%);
+  -webkit-backdrop-filter:blur(28px) saturate(185%);
+  border:1px solid rgba(255,255,255,.22);
+  box-shadow:
+    0 34px 70px -22px rgba(0,0,0,.62),
+    inset 0 1px 0 rgba(255,255,255,.62),
+    inset 0 0 26px rgba(255,255,255,.06);
+  direction:rtl; text-align:right;
+  opacity:0; transform:translateY(30px);               /* driven by JS */
+  will-change:transform, opacity;
+}
+/* liquid-glass specular sheen */
+.feature .copy::before{
+  content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+  background:radial-gradient(130% 90% at 18% 0%, rgba(255,255,255,.24), transparent 52%);
+}
+.feature .copy > *{ position:relative; z-index:1; }   /* keep text above the sheen */
+.feature .copy .kicker{
+  font-family:var(--font-en); direction:ltr; text-align:left; font-weight:700;
+  letter-spacing:.3em; font-size:12px; color:var(--accent); margin-bottom:14px;
+}
+.feature .copy h2{ font-family:var(--font-fa); font-weight:800; font-size:clamp(26px,3.4vw,42px); line-height:1.35; margin-bottom:18px; }
+.feature .copy p{
+  direction:ltr; text-align:left; font-family:var(--font-en); font-weight:500;
+  line-height:1.8; color:var(--muted); font-size:16px; max-width:52ch;
+}
+.feature .copy .cta{ margin-top:26px; }
+
+/* scroll hint */
+.hint{
+  position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:30;
+  font-family:var(--font-en); font-weight:600; font-size:11px; letter-spacing:.3em;
+  color:var(--muted); opacity:0; transition:opacity .5s var(--ease); pointer-events:none;
+}
+.loaded .hint{ opacity:1; }
+
+@keyframes rise{ to{ opacity:1; transform:translateY(0) scale(1); } }
+@keyframes fadein{ to{ opacity:1; } }
+
+/* ------------------------- responsive ------------------------- */
+@media (max-width:900px){
+  .nav .links{ display:none; }
+  .giant{ width:96vw; top:30%; }
+  .shoe-wrap{ width:90vw; top:42%; }
+  .swatches{ gap:14px; }
+  .swatch{ width:28px; height:28px; }
+  .stats{ display:none; }               /* keep the phone hero uncluttered */
+  .product{ bottom:9%; }
+  .feature{ grid-template-columns:1fr; gap:18px; text-align:center; padding:100px 22px 80px; }
+  .feature .copy{ direction:rtl; }
+}
+@media (prefers-reduced-motion:reduce){
+  .giant .anim,.shoe,.swatches,.product-in,.stats .stat{ opacity:1 !important; transform:none !important; animation:none !important; }
+}
+</style>
+</head>
+<body>
+
+  <div class="bg" aria-hidden="true"></div>
+
+  <!-- ============== NAV ============== -->
+  <nav class="nav">
+    <div class="brand">ROCKMAN</div>
+    <div class="links">
+      <a href="#">درباره</a><span class="dot"></span>
+      <a href="#">مجموعه‌ها</a><span class="dot"></span>
+      <a href="#">فروشگاه</a><span class="dot"></span>
+      <a href="#">تماس</a>
+    </div>
+    <div class="icons">
+      <button aria-label="جستجو"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg></button>
+      <button aria-label="علاقه‌مندی‌ها"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20s-7-4.6-9.2-8.3C1 8.5 2.5 5 6 5c2 0 3.2 1.2 4 2.3C10.8 6.2 12 5 14 5c3.5 0 5 3.5 3.2 6.7C19 15.4 12 20 12 20z" stroke-linejoin="round"/></svg></button>
+      <button aria-label="سبد خرید"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 7h12l-1 13H7L6 7z" stroke-linejoin="round"/><path d="M9 7a3 3 0 0 1 6 0" stroke-linecap="round"/></svg></button>
+    </div>
+  </nav>
+
+  <!-- tall track → pinned stage -->
+  <div class="scroll-track">
+    <div class="pin">
+
+      <!-- ============== HERO SCENE ============== -->
+      <section class="scene hero" id="hero">
+        <div class="hero-inner">
+          <div class="giant"><img class="anim" src="rockman.svg" alt="ROCKMAN"></div>
+
+          <div class="shoe-wrap">
+            <img class="shoe" src="01.png" alt="کفش سنگنوردی راکمن اومگا، نمای جانبی">
+          </div>
+
+          <div class="swatches" role="group" aria-label="انتخاب رنگ">
+            <button class="swatch b" aria-pressed="true"  aria-label="آبی"></button>
+            <button class="swatch r" aria-pressed="false" aria-label="قرمز"></button>
+            <button class="swatch g" aria-pressed="false" aria-label="خاکستری"></button>
+          </div>
+
+          <div class="product">
+            <div class="product-in">
+              <div class="name">تکنولوژی جهانی در دستان شما</div>
+            </div>
+          </div>
+
+          <div class="stats">
+            <div class="stat"><b>380g</b><span>وزن هر لنگه</span></div>
+            <div class="stat"><b>4.5mm</b><span>لاستیک ویبرام</span></div>
+            <div class="stat"><b>15°</b><span>قوس داونترن</span></div>
+            <div class="stat"><b>XS Grip</b><span>زیره چسبنده</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============== FEATURE SCENE ============== -->
+      <section class="scene feature" id="feature">
+        <div class="visual">
+          <img src="02.png" alt="کفش سنگنوردی راکمن اومگا، نمای سه‌رخ">
+        </div>
+        <div class="copy">
+          <div class="kicker">OMEGA</div>
+          <h2>مهندسی‌شده برای اوج</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+             ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+             aliquip ex ea commodo consequat.</p>
+          <a class="cta" href="#">جزئیات بیشتر</a>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <div class="hint" aria-hidden="true">SCROLL ↓</div>
+
+<script>
+  const start = ()=> document.body.classList.add('loaded');
+  window.addEventListener('load', start);
+  setTimeout(start, 900);
+
+  /* colour swatches — active ring + tint the spotlight */
+  const swatches = [...document.querySelectorAll('.swatch')];
+  const bg = document.querySelector('.bg');
+  const cores = { b:'#33466a', r:'#5c2a31', g:'#56565e' };
+  swatches.forEach(s=>{
+    s.addEventListener('click', ()=>{
+      swatches.forEach(o=>o.setAttribute('aria-pressed','false'));
+      s.setAttribute('aria-pressed','true');
+      const key = s.classList.contains('r') ? 'r' : s.classList.contains('g') ? 'g' : 'b';
+      bg.style.background = `#070708 radial-gradient(ellipse 68% 62% at 50% 42%, ${cores[key]} 0%, #33333a 24%, #17171b 52%, #070708 100%)`;
+    });
+  });
+
+  /* ---- pinned scroll: progress drives the transition ---- */
+  const track     = document.querySelector('.scroll-track');
+  const feature   = document.getElementById('feature');
+  const giant     = document.querySelector('.hero .giant');
+  const shoeWrap  = document.querySelector('.hero .shoe-wrap');
+  const swatchBox = document.querySelector('.hero .swatches');
+  const product   = document.querySelector('.hero .product');
+  const stats     = document.querySelector('.hero .stats');
+  const img2      = feature.querySelector('.visual img');
+  const copy      = feature.querySelector('.copy');
+  const hint      = document.querySelector('.hint');
+
+  const clamp = (v,a,b)=> Math.min(Math.max(v,a),b);
+  const ease  = t => t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
+
+  let ticking = false;
+  const onScroll = ()=>{ if(!ticking){ ticking = true; requestAnimationFrame(update); } };
+
+  function update(){
+    ticking = false;
+    const rect  = track.getBoundingClientRect();
+    const total = track.offsetHeight - window.innerHeight;
+    const p = total>0 ? clamp(-rect.top/total, 0, 1) : 0;
+
+    /* ROCKMAN wordmark: moves UP and fades — 0..0.5 */
+    const g = ease(clamp(p/0.5, 0, 1));
+    giant.style.transform = `translate(-50%, calc(-50% - ${g*42}vh))`;
+    giant.style.opacity = 1 - g;
+
+    /* tagline: slides LEFT and fades — 0..0.5 */
+    const pr = ease(clamp(p/0.5, 0, 1));
+    product.style.transform = `translateX(${-pr*52}vw)`;
+    product.style.opacity = 1 - pr;
+
+    /* the 4 stat boxes: move DOWN and fade — 0..0.5 */
+    const st = ease(clamp(p/0.5, 0, 1));
+    stats.style.transform = `translateY(${st*42}vh)`;
+    stats.style.opacity = 1 - st;
+
+    /* shoe slides RIGHT and fades; swatches fade — 0..0.55 */
+    const sh = ease(clamp(p/0.55, 0, 1));
+    shoeWrap.style.transform = `translate(calc(-50% + ${sh*55}vw), -50%)`;
+    shoeWrap.style.opacity  = 1 - sh;
+    swatchBox.style.opacity = 1 - sh;
+
+    /* feature scene fades in as the hero clears */
+    feature.style.opacity = ease(clamp((p-0.30)/0.28, 0, 1));
+
+    /* image 2 slides in FROM THE LEFT — 35%..85% */
+    const fi = ease(clamp((p-0.35)/0.50, 0, 1));
+    img2.style.opacity = fi;
+    img2.style.transform = `translateX(${(-1+fi)*90}px) scale(${0.95+0.05*fi})`;
+
+    /* copy fades up on the right — 50%..95% */
+    const fc = ease(clamp((p-0.50)/0.45, 0, 1));
+    copy.style.opacity = fc;
+    copy.style.transform = `translateY(${(1-fc)*30}px)`;
+
+    if(hint) hint.style.opacity = p>0.02 ? 0 : '';
+  }
+
+  window.addEventListener('scroll', onScroll, { passive:true });
+  window.addEventListener('resize', update);
+</script>
+</body>
+</html>

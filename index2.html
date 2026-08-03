@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ROCKMAN — تکنولوژی جهانی در دستان شما</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   ROCKMAN — index2
+   1) Hero over animated GLSL hills → fly-to-camera dissolve  (UNCHANGED)
+   2) Features: big shoe (left) + RTL options list (right); scroll advances
+      the active option (rolls to its highlighted state).
+   ===================================================================== */
+:root{
+  --ink:#f4f4f5; --muted:#a1a1aa; --dim:#71717a; --faint:rgba(255,255,255,.34);
+  --blue:#3b82f6;
+  --ease:cubic-bezier(.22,.61,.24,1);
+  --roll:cubic-bezier(.76,0,.24,1);
+  --font-en:"Archivo",system-ui,sans-serif;
+  --font-fa:"Vazirmatn",system-ui,sans-serif;
+}
+*{ box-sizing:border-box; margin:0; padding:0; }
+body{
+  font-family:var(--font-fa); color:var(--ink);
+  background:radial-gradient(ellipse 70% 65% at 50% 40%, #26262c 0%, #141418 34%, #08080a 66%, #050506 100%);
+  overflow-x:hidden;
+}
+
+/* animated hills — fixed behind the hero */
+#hills{ position:fixed; inset:0; width:100%; height:100%; z-index:0; display:block; pointer-events:none; }
+
+/* ============================ NAV ============================ */
+.nav{ position:fixed; top:0; left:0; right:0; z-index:60; display:flex; align-items:center; justify-content:space-between; padding:24px clamp(20px,4vw,54px); }
+.nav .brand{ font-family:var(--font-en); font-weight:800; font-size:22px; letter-spacing:.42em; }
+.nav .links{ position:absolute; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:20px; font-weight:500; font-size:15px; color:var(--muted); }
+.nav .links a{ color:var(--muted); text-decoration:none; transition:color .2s var(--ease); }
+.nav .links a:hover{ color:#fff; }
+.nav .links .dot{ width:4px; height:4px; border-radius:50%; background:var(--faint); }
+.nav .icons{ display:flex; align-items:center; gap:20px; }
+.nav .icons button{ background:none; border:0; color:#fff; cursor:pointer; padding:4px; line-height:0; opacity:.9; transition:opacity .2s, transform .2s var(--ease); }
+.nav .icons button:hover{ opacity:1; transform:translateY(-1px); }
+.nav .icons svg{ width:22px; height:22px; }
+.nav :focus-visible{ outline:2px solid #fff; outline-offset:3px; border-radius:4px; }
+
+/* ===================== HERO (pinned, fly-to-camera) — UNCHANGED ===================== */
+.hero-track{ position:relative; z-index:1; height:230vh; }
+.hero-pin{ position:sticky; top:0; height:100vh; overflow:hidden; }
+.giant{ position:absolute; top:33%; left:50%; transform:translate(-50%,-50%); z-index:2; width:min(92vw,1100px); will-change:transform,opacity; }
+.giant img{ display:block; width:100%; height:auto; filter:brightness(0) invert(1) drop-shadow(0 8px 50px rgba(0,0,0,.55)); opacity:0; transform:translateY(38px) scale(.98); }
+.loaded .giant img{ animation:rise 1.1s var(--ease) .15s forwards; }
+.shoe-wrap{ position:absolute; top:46%; left:50%; transform:translate(-50%,-50%); z-index:3; width:min(72vw,940px); will-change:transform,opacity; }
+.shoe-wrap img{ display:block; width:100%; height:auto; filter:drop-shadow(0 40px 46px rgba(0,0,0,.6)); opacity:0; transform:translateY(-30px) scale(.97); }
+.loaded .shoe-wrap img{ animation:rise 1.3s var(--ease) .35s forwards; }
+.tagline{ position:absolute; bottom:10%; left:0; right:0; z-index:4; text-align:center; }
+.tagline .scale{ display:inline-block; will-change:transform,opacity; transform-origin:center; }
+.tagline .in{ display:inline-block; font-weight:800; font-size:clamp(24px,3.4vw,46px); text-shadow:0 2px 30px rgba(0,0,0,.5); opacity:0; transform:translateY(26px); }
+.loaded .tagline .in{ animation:rise 1s var(--ease) .8s forwards; }
+.cue{ position:absolute; bottom:24px; left:50%; transform:translateX(-50%); z-index:5; font-family:var(--font-en); font-weight:600; font-size:11px; letter-spacing:.3em; color:var(--muted); opacity:0; }
+.loaded .cue{ animation:rise 1s var(--ease) 1.3s forwards; }
+@keyframes rise{ to{ opacity:1; transform:translate(0,0) scale(1); } }
+
+/* ===================== SECTION 2 — FEATURES (scroll through options) ===================== */
+.process{ position:relative; z-index:10; background:#0a0a0c; }
+.proc-track{ position:relative; height:360vh; }
+.proc-pin{ position:sticky; top:0; height:100vh; overflow:hidden; background:#0a0a0c; display:flex; align-items:center; }
+.proc-stage{
+  width:100%; max-width:1300px; margin:0 auto; padding:0 clamp(24px,5vw,80px);
+  display:flex; align-items:center; justify-content:space-between; gap:clamp(24px,5vw,80px);
+  direction:ltr;                 /* image LEFT, list RIGHT */
+}
+
+/* big, dominant shoe — no frame, no glow */
+.proc-visual{ flex:0 0 auto; width:min(56vw,780px); }
+.proc-visual img{ display:block; width:100%; height:auto; filter:drop-shadow(0 45px 60px rgba(0,0,0,.6)); }
+
+/* RTL options list */
+.proc-list{ flex:1 1 auto; max-width:520px; direction:rtl; }
+.proc-eyebrow{ font-family:var(--font-en); font-size:13px; font-weight:700; letter-spacing:.24em; text-transform:uppercase; color:var(--dim); margin-bottom:22px; text-align:right; }
+
+.roll-item{ position:relative; padding:12px 0; opacity:.26; transition:opacity .5s var(--ease); }
+.roll-item.active{ opacity:1; }
+.roll-mask{ position:relative; overflow:hidden; height:64px; }
+.roll-track{ transition:transform .55s var(--roll); }
+.roll-item.active .roll-track{ transform:translateY(-50%); }
+.roll-state{ height:64px; display:flex; align-items:center; }   /* rtl → title hugs the right */
+.roll-title{ font-family:var(--font-fa); font-weight:900; line-height:1; color:#fff; font-size:clamp(40px,5.6vw,74px); letter-spacing:-.01em; }
+.roll-title.alt{ color:var(--blue); }
+
+.roll-cat{ position:absolute; top:50%; left:0; transform:translateY(-50%); font-family:var(--font-en); font-size:12px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:#55555c; transition:color .4s var(--ease); }
+.roll-item.active .roll-cat{ color:var(--blue); }
+
+@media (min-width:768px){ .roll-mask,.roll-state{ height:82px; } }
+@media (max-width:900px){
+  .giant{ width:96vw; top:31%; }
+  .shoe-wrap{ width:92vw; top:44%; }
+  .nav .links{ display:none; }
+  .proc-stage{ flex-direction:column; gap:30px; padding:96px 22px; }
+  .proc-visual{ width:82vw; }
+  .proc-list{ width:100%; max-width:none; }
+  .roll-cat{ display:none; }
+  .roll-mask,.roll-state{ height:58px; }
+}
+@media (prefers-reduced-motion:reduce){
+  .giant img,.shoe-wrap img,.tagline .in,.cue{ opacity:1 !important; transform:none !important; animation:none !important; }
+}
+</style>
+</head>
+<body>
+
+  <!-- animated GLSL hills -->
+  <canvas id="hills"></canvas>
+
+  <!-- nav -->
+  <nav class="nav">
+    <div class="brand">ROCKMAN</div>
+    <div class="links">
+      <a href="#">درباره</a><span class="dot"></span>
+      <a href="#">مجموعه‌ها</a><span class="dot"></span>
+      <a href="#">فروشگاه</a><span class="dot"></span>
+      <a href="#">تماس</a>
+    </div>
+    <div class="icons">
+      <button aria-label="جستجو"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg></button>
+      <button aria-label="علاقه‌مندی‌ها"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20s-7-4.6-9.2-8.3C1 8.5 2.5 5 6 5c2 0 3.2 1.2 4 2.3C10.8 6.2 12 5 14 5c3.5 0 5 3.5 3.2 6.7C19 15.4 12 20 12 20z" stroke-linejoin="round"/></svg></button>
+      <button aria-label="سبد خرید"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 7h12l-1 13H7L6 7z" stroke-linejoin="round"/><path d="M9 7a3 3 0 0 1 6 0" stroke-linecap="round"/></svg></button>
+    </div>
+  </nav>
+
+  <!-- HERO (unchanged) -->
+  <div class="hero-track">
+    <div class="hero-pin">
+      <div class="giant"><img src="rockman.svg" alt="ROCKMAN"></div>
+      <div class="shoe-wrap"><img src="01.png" alt="کفش سنگنوردی راکمن"></div>
+      <div class="tagline"><span class="scale"><span class="in">تکنولوژی جهانی در دستان شما</span></span></div>
+      <div class="cue">SCROLL ↓</div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 — features (scroll through options) -->
+  <section class="process">
+    <div class="proc-track" id="procTrack">
+      <div class="proc-pin">
+        <div class="proc-stage">
+          <div class="proc-visual"><img src="01.png" alt="کفش سنگنوردی راکمن"></div>
+          <div class="proc-list">
+            <div class="proc-eyebrow">ویژگی‌ها</div>
+
+            <div class="roll-item">
+              <div class="roll-mask"><div class="roll-track">
+                <div class="roll-state"><h2 class="roll-title">چسبندگی</h2></div>
+                <div class="roll-state"><h2 class="roll-title alt">چسبندگی</h2></div>
+              </div></div>
+              <span class="roll-cat">Grip</span>
+            </div>
+
+            <div class="roll-item">
+              <div class="roll-mask"><div class="roll-track">
+                <div class="roll-state"><h2 class="roll-title">دقت</h2></div>
+                <div class="roll-state"><h2 class="roll-title alt">دقت</h2></div>
+              </div></div>
+              <span class="roll-cat">Precision</span>
+            </div>
+
+            <div class="roll-item">
+              <div class="roll-mask"><div class="roll-track">
+                <div class="roll-state"><h2 class="roll-title">حساسیت</h2></div>
+                <div class="roll-state"><h2 class="roll-title alt">حساسیت</h2></div>
+              </div></div>
+              <span class="roll-cat">Sensitivity</span>
+            </div>
+
+            <div class="roll-item">
+              <div class="roll-mask"><div class="roll-track">
+                <div class="roll-state"><h2 class="roll-title">دوام</h2></div>
+                <div class="roll-state"><h2 class="roll-title alt">دوام</h2></div>
+              </div></div>
+              <span class="roll-cat">Durability</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+  document.body.classList.add('loaded');
+  const clamp=(v,a,b)=>Math.min(Math.max(v,a),b);
+  const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+
+  /* ---- HERO: fly toward the camera on scroll, then dissolve (unchanged) ---- */
+  (function(){
+    const track=document.querySelector('.hero-track');
+    const giant=document.querySelector('.giant');
+    const shoe=document.querySelector('.shoe-wrap');
+    const tag=document.querySelector('.tagline .scale');
+    const cue=document.querySelector('.cue');
+    const hills=document.getElementById('hills');
+    let tick=false;
+    function onScroll(){ if(!tick){ tick=true; requestAnimationFrame(update); } }
+    function update(){
+      tick=false;
+      const rect=track.getBoundingClientRect();
+      const total=track.offsetHeight-window.innerHeight;
+      const p=total>0?clamp(-rect.top/total,0,1):0;
+      const z=ease(clamp(p/0.5,0,1));
+      const o=1-ease(clamp(p/0.45,0,1));
+      shoe.style.transform=`translate(-50%,-50%) scale(${1+z*2.8})`;
+      shoe.style.opacity=o;
+      giant.style.transform=`translate(-50%,-50%) scale(${1+z*2.0})`;
+      giant.style.opacity=o;
+      tag.style.transform=`scale(${1+z*1.6})`;
+      tag.style.opacity=o;
+      hills.style.opacity=o;
+      cue.style.opacity=p>0.03?0:'';
+    }
+    window.addEventListener('scroll',onScroll,{passive:true});
+    window.addEventListener('resize',onScroll);
+    onScroll();
+  })();
+
+  /* ---- SECTION 2: scroll advances the active option ---- */
+  (function(){
+    const track=document.getElementById('procTrack');
+    const items=[...document.querySelectorAll('.roll-item')];
+    const N=items.length;
+    let tick=false;
+    function onScroll(){ if(!tick){ tick=true; requestAnimationFrame(update); } }
+    function update(){
+      tick=false;
+      const rect=track.getBoundingClientRect();
+      const total=track.offsetHeight-window.innerHeight;
+      const p=total>0?clamp(-rect.top/total,0,1):0;
+      const idx=clamp(Math.floor(p*N), 0, N-1);
+      items.forEach((it,i)=>it.classList.toggle('active', i===idx));
+    }
+    window.addEventListener('scroll',onScroll,{passive:true});
+    window.addEventListener('resize',onScroll);
+    onScroll();
+  })();
+
+  /* ---- GLSL animated hills (Three.js) ---- */
+  (function(){
+    if(!window.THREE){ console.warn('three.js not loaded'); return; }
+    var CAMERA_Z=125, PLANE=256, SPEED=0.5, canvas=document.getElementById('hills');
+    function Plane(){
+      this.uniforms={ time:{ type:'f', value:0 } }; this.time=SPEED;
+      this.mesh=new THREE.Mesh(
+        new THREE.PlaneGeometry(PLANE,PLANE,PLANE,PLANE),
+        new THREE.RawShaderMaterial({ uniforms:this.uniforms, transparent:true,
+          vertexShader:[
+            '#define GLSLIFY 1','attribute vec3 position;','uniform mat4 projectionMatrix;','uniform mat4 modelViewMatrix;','uniform float time;','varying vec3 vPosition;',
+            'mat4 rotateMatrixX(float radian){ return mat4(1.0,0.0,0.0,0.0, 0.0,cos(radian),-sin(radian),0.0, 0.0,sin(radian),cos(radian),0.0, 0.0,0.0,0.0,1.0); }',
+            'vec3 mod289(vec3 x){ return x - floor(x*(1.0/289.0))*289.0; }','vec4 mod289(vec4 x){ return x - floor(x*(1.0/289.0))*289.0; }',
+            'vec4 permute(vec4 x){ return mod289(((x*34.0)+1.0)*x); }','vec4 taylorInvSqrt(vec4 r){ return 1.79284291400159 - 0.85373472095314*r; }','vec3 fade(vec3 t){ return t*t*t*(t*(t*6.0-15.0)+10.0); }',
+            'float cnoise(vec3 P){',
+            ' vec3 Pi0=floor(P); vec3 Pi1=Pi0+vec3(1.0); Pi0=mod289(Pi0); Pi1=mod289(Pi1);',
+            ' vec3 Pf0=fract(P); vec3 Pf1=Pf0-vec3(1.0);',
+            ' vec4 ix=vec4(Pi0.x,Pi1.x,Pi0.x,Pi1.x); vec4 iy=vec4(Pi0.yy,Pi1.yy); vec4 iz0=Pi0.zzzz; vec4 iz1=Pi1.zzzz;',
+            ' vec4 ixy=permute(permute(ix)+iy); vec4 ixy0=permute(ixy+iz0); vec4 ixy1=permute(ixy+iz1);',
+            ' vec4 gx0=ixy0*(1.0/7.0); vec4 gy0=fract(floor(gx0)*(1.0/7.0))-0.5; gx0=fract(gx0); vec4 gz0=vec4(0.5)-abs(gx0)-abs(gy0); vec4 sz0=step(gz0,vec4(0.0)); gx0-=sz0*(step(0.0,gx0)-0.5); gy0-=sz0*(step(0.0,gy0)-0.5);',
+            ' vec4 gx1=ixy1*(1.0/7.0); vec4 gy1=fract(floor(gx1)*(1.0/7.0))-0.5; gx1=fract(gx1); vec4 gz1=vec4(0.5)-abs(gx1)-abs(gy1); vec4 sz1=step(gz1,vec4(0.0)); gx1-=sz1*(step(0.0,gx1)-0.5); gy1-=sz1*(step(0.0,gy1)-0.5);',
+            ' vec3 g000=vec3(gx0.x,gy0.x,gz0.x); vec3 g100=vec3(gx0.y,gy0.y,gz0.y); vec3 g010=vec3(gx0.z,gy0.z,gz0.z); vec3 g110=vec3(gx0.w,gy0.w,gz0.w);',
+            ' vec3 g001=vec3(gx1.x,gy1.x,gz1.x); vec3 g101=vec3(gx1.y,gy1.y,gz1.y); vec3 g011=vec3(gx1.z,gy1.z,gz1.z); vec3 g111=vec3(gx1.w,gy1.w,gz1.w);',
+            ' vec4 norm0=taylorInvSqrt(vec4(dot(g000,g000),dot(g010,g010),dot(g100,g100),dot(g110,g110))); g000*=norm0.x; g010*=norm0.y; g100*=norm0.z; g110*=norm0.w;',
+            ' vec4 norm1=taylorInvSqrt(vec4(dot(g001,g001),dot(g011,g011),dot(g101,g101),dot(g111,g111))); g001*=norm1.x; g011*=norm1.y; g101*=norm1.z; g111*=norm1.w;',
+            ' float n000=dot(g000,Pf0); float n100=dot(g100,vec3(Pf1.x,Pf0.yz)); float n010=dot(g010,vec3(Pf0.x,Pf1.y,Pf0.z)); float n110=dot(g110,vec3(Pf1.xy,Pf0.z));',
+            ' float n001=dot(g001,vec3(Pf0.xy,Pf1.z)); float n101=dot(g101,vec3(Pf1.x,Pf0.y,Pf1.z)); float n011=dot(g011,vec3(Pf0.x,Pf1.yz)); float n111=dot(g111,Pf1);',
+            ' vec3 fade_xyz=fade(Pf0); vec4 n_z=mix(vec4(n000,n100,n010,n110),vec4(n001,n101,n011,n111),fade_xyz.z); vec2 n_yz=mix(n_z.xy,n_z.zw,fade_xyz.y); float n_xyz=mix(n_yz.x,n_yz.y,fade_xyz.x); return 2.2*n_xyz;',
+            '}',
+            'void main(void){',
+            ' vec3 updatePosition=(rotateMatrixX(radians(90.0))*vec4(position,1.0)).xyz;',
+            ' float sin1=sin(radians(updatePosition.x/128.0*90.0));',
+            ' vec3 noisePosition=updatePosition+vec3(0.0,0.0,time*-30.0);',
+            ' float noise1=cnoise(noisePosition*0.08); float noise2=cnoise(noisePosition*0.06); float noise3=cnoise(noisePosition*0.4);',
+            ' vec3 lastPosition=updatePosition+vec3(0.0, noise1*sin1*8.0 + noise2*sin1*8.0 + noise3*(abs(sin1)*2.0+0.5) + pow(sin1,2.0)*40.0, 0.0);',
+            ' vPosition=lastPosition; gl_Position=projectionMatrix*modelViewMatrix*vec4(lastPosition,1.0);',
+            '}'
+          ].join('\n'),
+          fragmentShader:['precision highp float;','#define GLSLIFY 1','varying vec3 vPosition;','void main(void){ float opacity=(96.0-length(vPosition))/256.0*0.6; vec3 color=vec3(0.6); gl_FragColor=vec4(color,opacity); }'].join('\n')
+        })
+      );
+    }
+    Plane.prototype.render=function(dt){ this.uniforms.time.value+=dt*this.time; };
+    var renderer=new THREE.WebGLRenderer({ canvas:canvas, antialias:false, alpha:true });
+    var scene=new THREE.Scene();
+    var camera=new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 1, 10000);
+    var clock=new THREE.Clock(); var plane=new Plane();
+    function resize(){ camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth,innerHeight); }
+    function loop(){ plane.render(clock.getDelta()); renderer.render(scene,camera); requestAnimationFrame(loop); }
+    renderer.setSize(innerWidth,innerHeight); renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.setClearColor(0x000000,0);
+    camera.position.set(0,16,CAMERA_Z); camera.lookAt(new THREE.Vector3(0,28,0));
+    scene.add(plane.mesh); addEventListener('resize',resize); resize(); loop();
+  })();
+  </script>
+</body>
+</html>
