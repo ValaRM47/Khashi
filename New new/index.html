@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>راکمن اومگا | کفش سنگ‌نوردی</title>
+<meta name="description" content="اومگا، ساخت راکمن. کفش سنگ‌نوردی مهندسی‌شده برای دیوار.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script>
+  /* Enhance synchronously to avoid a fallback→enhanced flash */
+  try {
+    document.documentElement.setAttribute('data-enhanced', '');
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches)
+      document.documentElement.setAttribute('data-reduced', '');
+  } catch (e) {}
+</script>
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    color-scheme: dark;
+    --bg:#060a10;
+    --ink:#0a0f16;
+    --fg:#eef4fa;
+    --muted:rgba(238,244,250,.60);
+    --faint:rgba(238,244,250,.34);
+    --line:rgba(238,244,250,.12);
+    --accent:#19a3ff;          /* electric blue, single locked accent */
+    --accent-deep:#0069d1;
+    --accent-ink:#031424;
+    --glass:rgba(9,15,24,.42);
+    --r-surface:8px;           /* surfaces */
+    --r-media:10px;            /* media */
+    /* shape rule: interactive controls = full pill; surfaces/media = fixed radii above */
+    --nav-h:66px;
+    --frames:4;                /* number of hero slides */
+    --ease:cubic-bezier(.16,1,.3,1);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg);
+    color:var(--fg);
+    font-family:"Vazirmatn", Tahoma, system-ui, -apple-system, sans-serif;
+    font-weight:400;
+    line-height:1.7;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  ::selection{background:var(--accent);color:#fff}
+
+  .wrap{max-width:1320px;margin-inline:auto;padding-inline:clamp(20px,5vw,64px)}
+
+  /* ============ NAV ============ */
+  .nav{
+    position:fixed;inset-block-start:0;inset-inline:0;height:var(--nav-h);z-index:80;
+    display:flex;align-items:center;justify-content:space-between;
+    padding-inline:clamp(18px,4vw,42px);
+    background:linear-gradient(180deg, rgba(4,8,13,.72), rgba(4,8,13,0));
+    backdrop-filter:blur(10px) saturate(140%);
+    -webkit-backdrop-filter:blur(10px) saturate(140%);
+  }
+  .nav__logo{display:flex;align-items:center;gap:12px}
+  .nav__logo img{height:22px;width:auto;opacity:.96}
+  .nav__links{display:flex;align-items:center;gap:clamp(16px,2.4vw,34px)}
+  .nav__links a{
+    font-size:14px;font-weight:500;color:var(--muted);letter-spacing:.01em;
+    transition:color .25s var(--ease);position:relative;padding-block:6px;
+  }
+  .nav__links a:hover{color:var(--fg)}
+  .btn{
+    font-family:inherit;cursor:pointer;border:0;border-radius:999px;
+    font-weight:600;letter-spacing:.01em;white-space:nowrap;
+    transition:transform .18s var(--ease), background .25s var(--ease), box-shadow .25s var(--ease);
+  }
+  .btn:active{transform:translateY(1px) scale(.985)}
+  .btn--solid{
+    background:var(--accent);color:#04121f;padding:10px 22px;font-size:14px;
+    box-shadow:0 6px 22px -8px rgba(25,163,255,.7);
+  }
+  .btn--solid:hover{background:#3bb4ff;box-shadow:0 10px 30px -8px rgba(25,163,255,.85)}
+  .btn--ghost{
+    background:rgba(238,244,250,.06);color:var(--fg);padding:10px 22px;font-size:14px;
+    border:1px solid var(--line);
+  }
+  .btn--ghost:hover{background:rgba(238,244,250,.12)}
+  .btn--lg{padding:15px 34px;font-size:15px}
+  @media (max-width:720px){ .nav__links a:not(.nav__cta){display:none} }
+
+  /* ============ SHOWCASE (pinned kinetic hero) ============ */
+  .showcase{position:relative;height:auto}
+  .stage{
+    position:relative;height:100svh;overflow:hidden;
+    background:radial-gradient(120% 90% at 78% 12%, #0e2036 0%, #060a10 62%);
+  }
+  [data-enhanced] .showcase{height:calc(var(--frames) * 100svh)}
+  [data-enhanced] .stage{position:sticky;inset-block-start:0}
+
+  /* background gradient plates (crossfade) */
+  .bg{position:absolute;inset:0;background-size:cover;background-position:center;
+      opacity:0;will-change:opacity,transform;transform:scale(1.05)}
+  .bg::after{content:"";position:absolute;inset:0;
+      background:linear-gradient(180deg, rgba(4,8,13,.30) 0%, rgba(4,8,13,.12) 42%, rgba(4,8,13,.78) 100%)}
+  .bg[data-i="0"]{background-image:url('backgrounds/bc1.png')}
+  .bg[data-i="1"]{background-image:url('backgrounds/bc2.png')}
+  .bg[data-i="2"]{background-image:url('backgrounds/bc3.png')}
+  .bg[data-i="3"]{background-image:url('backgrounds/bc4.png')}
+  :not([data-enhanced]) .bg[data-i="0"]{opacity:1;transform:none}
+  [data-enhanced] .bg[data-i="0"]{opacity:1}
+
+  /* persistent brand wordmarks, stay the whole scroll */
+  .wm{position:absolute;pointer-events:none;left:50%;transform:translateX(-50%);
+      opacity:.09;filter:drop-shadow(0 2px 30px rgba(0,0,0,.4));will-change:transform}
+  .wm--rockman{top:15%;width:min(112vw,1500px);opacity:.10}
+  .wm--omega{top:46%;width:min(80vw,1000px);opacity:.07}
+
+  /* the travelling product shoe */
+  .shoe{
+    position:absolute;left:50%;top:44%;
+    width:min(48vw,640px);
+    transform:translate(-50%,-50%);
+    opacity:0;will-change:transform,opacity;
+    filter:drop-shadow(0 44px 60px rgba(0,0,0,.55));
+  }
+  :not([data-enhanced]) .shoe[data-i="0"]{opacity:1}
+  [data-enhanced] .shoe[data-i="0"]{opacity:1}
+
+  /* copy decks (crossfade in place) */
+  .deck{
+    position:absolute;z-index:6;
+    inset-inline-end:clamp(22px,6vw,92px);
+    inset-block-end:clamp(84px,13vh,150px);
+    max-width:min(540px,80vw);text-align:start;opacity:0;
+    will-change:transform,opacity;
+  }
+  :not([data-enhanced]) .deck[data-i="0"]{opacity:1}
+  [data-enhanced] .deck[data-i="0"]{opacity:1}
+  .deck__tag{
+    display:inline-block;font-size:12.5px;font-weight:600;letter-spacing:.14em;
+    color:var(--accent);background:rgba(25,163,255,.10);border:1px solid rgba(25,163,255,.30);
+    padding:5px 13px;border-radius:999px;margin-bottom:16px;
+  }
+  .deck__title{
+    font-size:clamp(38px,7vw,88px);font-weight:800;line-height:.94;letter-spacing:-.01em;
+    margin:0 0 12px;
+  }
+  .deck__title b{color:var(--accent);font-weight:800}
+  .deck__line{font-size:clamp(16px,2vw,21px);color:var(--fg);font-weight:500;margin:0 0 20px;max-width:22ch}
+  .deck__chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+  .chip{
+    font-size:13px;font-weight:500;color:var(--muted);
+    background:var(--glass);border:1px solid var(--line);
+    padding:7px 14px;border-radius:999px;backdrop-filter:blur(6px)
+  }
+  .deck__buy{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .deck__price{display:flex;flex-direction:column;line-height:1.2}
+  .deck__price b{font-size:clamp(20px,2.6vw,26px);font-weight:700}
+  .deck__price span{font-size:12px;color:var(--faint)}
+
+  /* HUD / slide navigator */
+  .hud{
+    position:absolute;z-index:7;display:none;flex-direction:column;gap:2px;
+    inset-inline-start:clamp(18px,4vw,52px);top:50%;transform:translateY(-50%);
+  }
+  .hud__item{
+    display:flex;align-items:center;gap:12px;background:none;border:0;cursor:pointer;
+    font-family:inherit;color:var(--faint);padding:9px 0;transition:color .3s var(--ease);
+  }
+  .hud__bar{position:relative;width:34px;height:2px;background:rgba(238,244,250,.18);overflow:hidden;border-radius:2px}
+  .hud__bar::after{content:"";position:absolute;inset:0;background:var(--accent);
+      transform:scaleX(0);transform-origin:inline-start;transition:transform .35s var(--ease)}
+  .hud__label{font-size:13px;font-weight:500;letter-spacing:.02em}
+  .hud__item[aria-current="true"]{color:var(--fg)}
+  .hud__item[aria-current="true"] .hud__bar{width:52px}
+  .hud__item[aria-current="true"] .hud__bar::after{transform:scaleX(1)}
+  @media (max-width:720px){
+    .hud{inset-inline-start:14px}
+    .hud__label{display:none}
+    .deck{inset-block-end:clamp(76px,11vh,120px)}
+  }
+
+  /* ============ REVEAL SECTIONS ============ */
+  section.blk{position:relative;z-index:2;background:var(--bg)}
+  .kicker{font-size:12.5px;font-weight:600;letter-spacing:.16em;color:var(--accent);margin-bottom:16px}
+  .h2{font-size:clamp(30px,5vw,58px);font-weight:800;line-height:1.02;letter-spacing:-.01em;margin:0 0 18px}
+  .lead{font-size:clamp(16px,1.7vw,19px);color:var(--muted);max-width:60ch;margin:0}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  [data-reduced] .reveal{opacity:1;transform:none;transition:none}
+
+  /* --- TECH bento --- */
+  .tech{padding-block:clamp(90px,13vh,150px)}
+  .tech__head{max-width:640px;margin-bottom:clamp(34px,5vh,56px)}
+  .bento{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:minmax(150px,auto);gap:14px}
+  .cell{position:relative;overflow:hidden;border-radius:var(--r-surface);border:1px solid var(--line);
+        padding:26px;display:flex;flex-direction:column;justify-content:flex-end;min-height:200px}
+  .cell h3{font-size:clamp(19px,2.2vw,25px);font-weight:700;margin:0 0 8px}
+  .cell p{font-size:14.5px;color:var(--muted);margin:0;max-width:38ch}
+  .cell--a{grid-column:1/8;grid-row:1/3;min-height:420px;background:#0a1420}
+  .cell--a .cell__media{position:absolute;inset:0;background:url('backgrounds/bc2.png') center/cover;opacity:.5}
+  .cell--a .cell__media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,10,16,.1),rgba(6,10,16,.9))}
+  .cell--a .cell__shoe{position:absolute;inset-inline-end:-6%;top:8%;width:78%;transform:rotate(-6deg);
+        filter:drop-shadow(0 30px 40px rgba(0,0,0,.5));opacity:.98}
+  .cell--a > *{position:relative;z-index:2}
+  .cell--b{grid-column:8/13;grid-row:1/2;
+        background:linear-gradient(135deg,var(--accent) 0%,var(--accent-deep) 100%);color:#03121f}
+  .cell--b h3{color:#04131f}.cell--b p{color:rgba(4,19,31,.72)}
+  .cell--c{grid-column:8/13;grid-row:2/3;background:#0b121c}
+  .cell--d{grid-column:1/13;grid-row:3/4;min-height:230px;background:#0a1018;
+        flex-direction:row;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .cell--d .cell__media{position:absolute;inset:0;background:url('backgrounds/bc4.png') center/cover;opacity:.34}
+  .cell--d .cell__media::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,10,16,.92),rgba(6,10,16,.5))}
+  .cell--d > *{position:relative;z-index:2}
+  .cell__big{font-size:clamp(40px,6vw,74px);font-weight:800;line-height:1;letter-spacing:-.02em}
+  @media (max-width:820px){
+    .bento{grid-template-columns:1fr}
+    .cell,.cell--a,.cell--b,.cell--c,.cell--d{grid-column:auto!important;grid-row:auto!important;min-height:230px}
+    .cell--a{min-height:340px}
+    .cell--d{flex-direction:column;align-items:flex-start}
+  }
+
+  /* --- SPEC tiles --- */
+  .spec{padding-block:clamp(70px,10vh,120px);border-block-start:1px solid var(--line)}
+  .spec__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+  .spec__cell{padding:14px clamp(16px,2.4vw,34px)}
+  .spec__cell + .spec__cell{border-inline-start:1px solid var(--line)}
+  .spec__num{font-size:clamp(38px,5.4vw,66px);font-weight:800;line-height:1;letter-spacing:-.02em;color:var(--fg)}
+  .spec__num em{font-style:normal;color:var(--accent);font-size:.5em;font-weight:600}
+  .spec__lbl{margin-top:12px;font-size:14px;color:var(--muted)}
+  @media (max-width:720px){
+    .spec__grid{grid-template-columns:1fr 1fr;gap:24px 0}
+    .spec__cell:nth-child(odd){border-inline-start:0}
+  }
+
+  /* --- QUOTE --- */
+  .quote{padding-block:clamp(90px,14vh,170px);text-align:center;position:relative;overflow:hidden}
+  .quote::before{content:"";position:absolute;inset:0;
+      background:radial-gradient(70% 120% at 50% 0%, rgba(25,163,255,.12), transparent 60%)}
+  .quote__body{position:relative;font-size:clamp(24px,4vw,44px);font-weight:700;line-height:1.32;
+      max-width:16ch;margin:0 auto 28px;letter-spacing:-.01em}
+  .quote__by{position:relative;font-size:15px;color:var(--muted)}
+  .quote__by b{display:block;color:var(--fg);font-weight:600;font-size:16px;margin-bottom:2px}
+
+  /* --- CTA band --- */
+  .cta{position:relative;overflow:hidden;padding-block:clamp(80px,12vh,140px);
+      background:linear-gradient(135deg,#0a1a2c,#060a10)}
+  .cta__bg{position:absolute;inset:0;background:url('backgrounds/bc3.png') center/cover;opacity:.4}
+  .cta__bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,10,16,.55),rgba(6,10,16,.85))}
+  .cta__in{position:relative;z-index:2;max-width:720px}
+  .cta__sizes{display:flex;flex-wrap:wrap;gap:9px;margin:28px 0 32px}
+  .size{min-width:52px;text-align:center;font-family:inherit;font-size:15px;font-weight:600;
+      color:var(--fg);background:rgba(238,244,250,.05);border:1px solid var(--line);
+      border-radius:999px;padding:11px 8px;cursor:pointer;transition:all .2s var(--ease)}
+  .size:hover{border-color:rgba(25,163,255,.5);background:rgba(25,163,255,.08)}
+  .size[aria-pressed="true"]{background:var(--accent);color:#04121f;border-color:var(--accent)}
+  .cta__row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+
+  /* --- FOOTER --- */
+  footer{border-block-start:1px solid var(--line);padding-block:44px;background:var(--ink)}
+  .foot{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .foot img{height:20px;opacity:.85}
+  .foot__links{display:flex;gap:26px}
+  .foot__links a{font-size:14px;color:var(--muted);transition:color .2s var(--ease)}
+  .foot__links a:hover{color:var(--fg)}
+  .foot__cp{font-size:13px;color:var(--faint)}
+
+  @media (prefers-reduced-motion: reduce){
+    *{scroll-behavior:auto!important}
+  }
+</style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="nav">
+    <a class="nav__logo" href="#" aria-label="راکمن">
+      <img src="brand/rockman-logo.png" alt="راکمن">
+    </a>
+    <nav class="nav__links">
+      <a href="#tech">تکنولوژی</a>
+      <a href="#spec">مشخصات</a>
+      <a href="#buy">سایزبندی</a>
+      <a class="nav__cta btn btn--solid" href="#buy">افزودن به سبد</a>
+    </nav>
+  </header>
+
+  <!-- KINETIC HERO -->
+  <section class="showcase" id="showcase" aria-label="سری اومگا">
+    <div class="stage">
+      <!-- backgrounds -->
+      <div class="bg" data-i="0"></div>
+      <div class="bg" data-i="1"></div>
+      <div class="bg" data-i="2"></div>
+      <div class="bg" data-i="3"></div>
+
+      <!-- persistent brand wordmarks -->
+      <img class="wm wm--rockman" src="brand/rockman-mark.png" alt="" aria-hidden="true">
+      <img class="wm wm--omega" src="brand/omega-mark.png" alt="" aria-hidden="true">
+
+      <!-- travelling shoes (swap each src for its real variant later) -->
+      <img class="shoe" data-i="0" src="02.png" alt="کفش سنگ‌نوردی اومگا استاندارد">
+      <img class="shoe" data-i="1" src="02.png" alt="کفش سنگ‌نوردی اومگا پرو">
+      <img class="shoe" data-i="2" src="02.png" alt="کفش سنگ‌نوردی اومگا سبک">
+      <img class="shoe" data-i="3" src="02.png" alt="کفش سنگ‌نوردی اومگا رقابتی">
+
+      <!-- copy decks -->
+      <div class="deck" data-i="0">
+        <span class="deck__tag">استاندارد</span>
+        <h1 class="deck__title">اومگا</h1>
+        <p class="deck__line">تعادل کامل، برای هر دیوار و هر مسیر.</p>
+        <div class="deck__chips"><span class="chip">چسبندگی بالا</span><span class="chip">فیت متعادل</span></div>
+        <div class="deck__buy">
+          <a class="btn btn--solid btn--lg" href="#buy">افزودن به سبد</a>
+          <span class="deck__price"><b>۴٬۲۰۰٬۰۰۰ تومان</b><span>ارسال رایگان</span></span>
+        </div>
+      </div>
+
+      <div class="deck" data-i="1">
+        <span class="deck__tag">پرو</span>
+        <h1 class="deck__title">اومگا</h1>
+        <p class="deck__line">کنترل دقیق روی ریزترین گیره‌ها.</p>
+        <div class="deck__chips"><span class="chip">دماغه‌ی تیز</span><span class="chip">لاستیک ۴ میلی‌متر</span></div>
+        <div class="deck__buy">
+          <a class="btn btn--solid btn--lg" href="#buy">افزودن به سبد</a>
+          <span class="deck__price"><b>۴٬۸۰۰٬۰۰۰ تومان</b><span>ارسال رایگان</span></span>
+        </div>
+      </div>
+
+      <div class="deck" data-i="2">
+        <span class="deck__tag">سبک</span>
+        <h1 class="deck__title">اومگا</h1>
+        <p class="deck__line">سبک‌ترین حسِ ممکن زیر پا.</p>
+        <div class="deck__chips"><span class="chip">وزن ۱۹۰ گرم</span><span class="chip">فیت کم‌حجم</span></div>
+        <div class="deck__buy">
+          <a class="btn btn--solid btn--lg" href="#buy">افزودن به سبد</a>
+          <span class="deck__price"><b>۴٬۵۰۰٬۰۰۰ تومان</b><span>ارسال رایگان</span></span>
+        </div>
+      </div>
+
+      <div class="deck" data-i="3">
+        <span class="deck__tag">رقابتی</span>
+        <h1 class="deck__title">اومگا</h1>
+        <p class="deck__line">ساخته‌شده برای سکوی مسابقه.</p>
+        <div class="deck__chips"><span class="chip">قوس تهاجمی</span><span class="chip">بستِ سریع</span></div>
+        <div class="deck__buy">
+          <a class="btn btn--solid btn--lg" href="#buy">افزودن به سبد</a>
+          <span class="deck__price"><b>۵٬۶۰۰٬۰۰۰ تومان</b><span>ارسال رایگان</span></span>
+        </div>
+      </div>
+
+      <!-- slide navigator -->
+      <div class="hud" id="hud" role="tablist" aria-label="نسخه‌های اومگا">
+        <button class="hud__item" data-go="0" aria-current="true"><span class="hud__bar"></span><span class="hud__label">استاندارد</span></button>
+        <button class="hud__item" data-go="1"><span class="hud__bar"></span><span class="hud__label">پرو</span></button>
+        <button class="hud__item" data-go="2"><span class="hud__bar"></span><span class="hud__label">سبک</span></button>
+        <button class="hud__item" data-go="3"><span class="hud__bar"></span><span class="hud__label">رقابتی</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECH -->
+  <section class="blk tech wrap" id="tech">
+    <div class="tech__head reveal">
+      <p class="kicker">تکنولوژی</p>
+      <h2 class="h2">مهندسی‌شده برای سنگ</h2>
+      <p class="lead">هر لایه‌ی اومگا برای یک کار ساخته شده: چسبیدن، ماندن و انتقال کوچک‌ترین فشار از پا به گیره.</p>
+    </div>
+
+    <div class="bento reveal">
+      <article class="cell cell--a">
+        <div class="cell__media"></div>
+        <img class="cell__shoe" src="02.png" alt="نمای لاستیک بیرونی اومگا">
+        <h3>لاستیک چسبنده‌ی راکمن</h3>
+        <p>ترکیب اختصاصی با اصطکاک بالا که روی گرانیت صیقلی و رزین سالن یکسان می‌چسبد.</p>
+      </article>
+      <article class="cell cell--b">
+        <h3>قوس پنجه‌ی تهاجمی</h3>
+        <p>انتقال نیرو مستقیم به نوک انگشتان برای فشار روی ریزگیره‌ها.</p>
+      </article>
+      <article class="cell cell--c">
+        <h3>بستِ چسبی سریع</h3>
+        <p>یک حرکت، فیت محکم. باز و بسته کردن بین هر تلاش، بی‌مکث.</p>
+      </article>
+      <article class="cell cell--d">
+        <div class="cell__media"></div>
+        <div>
+          <h3>رویه‌ی نفس‌گیر</h3>
+          <p>میکروفیبر و آستر مِش، برای روزهای بلند بدون داغ‌شدن پا.</p>
+        </div>
+        <div class="cell__big">۰٪ کشیدگی</div>
+      </article>
+    </div>
+  </section>
+
+  <!-- SPEC -->
+  <section class="blk spec wrap" id="spec">
+    <div class="spec__grid reveal">
+      <div class="spec__cell"><div class="spec__num">۴<em> م.م</em></div><div class="spec__lbl">ضخامت لاستیک بیرونی</div></div>
+      <div class="spec__cell"><div class="spec__num">۱۹۰<em> گرم</em></div><div class="spec__lbl">وزن هر لنگه، سایز ۴۰</div></div>
+      <div class="spec__cell"><div class="spec__num">تهاجمی</div><div class="spec__lbl">پروفایل قوس پنجه</div></div>
+      <div class="spec__cell"><div class="spec__num">۳۶ تا ۴۵</div><div class="spec__lbl">بازه‌ی سایزبندی</div></div>
+    </div>
+  </section>
+
+  <!-- QUOTE -->
+  <section class="blk quote wrap">
+    <p class="quote__body reveal">«اومگا اولین کفشیه که یادم می‌ره پامه؛ دقیقاً همون‌جایی می‌مونه که می‌خوام.»</p>
+    <div class="quote__by reveal">
+      <b>سارا رهنما</b>
+      سنگ‌نورد حرفه‌ای، تیم ملی
+    </div>
+  </section>
+
+  <!-- CTA / SIZING -->
+  <section class="blk cta" id="buy">
+    <div class="cta__bg"></div>
+    <div class="wrap">
+      <div class="cta__in reveal">
+        <h2 class="h2">اومگای خودت را انتخاب کن</h2>
+        <p class="lead">سایز اروپایی خود را بزن و همین امروز سفارش بده. ارسال رایگان به سراسر ایران.</p>
+        <div class="cta__sizes" role="group" aria-label="انتخاب سایز">
+          <button class="size">۳۶</button><button class="size">۳۷</button><button class="size">۳۸</button>
+          <button class="size">۳۹</button><button class="size" aria-pressed="true">۴۰</button><button class="size">۴۱</button>
+          <button class="size">۴۲</button><button class="size">۴۳</button><button class="size">۴۴</button><button class="size">۴۵</button>
+        </div>
+        <div class="cta__row">
+          <a class="btn btn--solid btn--lg" href="#">افزودن به سبد</a>
+          <a class="btn btn--ghost btn--lg" href="#">راهنمای سایز</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap foot">
+      <img src="brand/rockman-logo.png" alt="راکمن">
+      <nav class="foot__links">
+        <a href="#tech">تکنولوژی</a>
+        <a href="#spec">مشخصات</a>
+        <a href="#buy">فروشگاه</a>
+      </nav>
+      <span class="foot__cp">© ۱۴۰۴ راکمن. تمام حقوق محفوظ است.</span>
+    </div>
+  </footer>
+
+<script>
+(function(){
+  "use strict";
+  var root = document.documentElement;
+  if (!root.hasAttribute('data-enhanced')) return;
+
+  var reduced = root.hasAttribute('data-reduced');
+  var N = 4;
+  var showcase = document.getElementById('showcase');
+  var bgs   = Array.prototype.slice.call(document.querySelectorAll('.bg'));
+  var shoes = Array.prototype.slice.call(document.querySelectorAll('.shoe'));
+  var decks = Array.prototype.slice.call(document.querySelectorAll('.deck'));
+  var wmR   = document.querySelector('.wm--rockman');
+  var wmO   = document.querySelector('.wm--omega');
+  var hud   = document.getElementById('hud');
+  var hudItems = Array.prototype.slice.call(hud.querySelectorAll('.hud__item'));
+
+  function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+  function ease(t){ return t<.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; } // easeInOutCubic
+  function lerp(a,b,t){ return a+(b-a)*t; }
+
+  function mags(){
+    var w = window.innerWidth;
+    var small = w < 760;
+    if (reduced) return { exX:0, exY:5, sMin:.9, rot:0 };
+    return { exX: small?80:60, exY: small?24:30, sMin: small?.5:.56, rot: small?6:9 };
+  }
+
+  // state for a shoe at signed distance `delta` (c - i)
+  function shoeState(delta, m){
+    if (delta <= -1 || delta >= 1) return { x:(delta<0?m.exX:-m.exX), y:-m.exY, s:m.sMin, r:(delta<0?-m.rot:m.rot), o:0 };
+    var x,y,s,r,o;
+    if (delta < 0){                 // entering from top-right -> center
+      var u = ease(delta + 1);
+      x = lerp(m.exX, 0, u); y = lerp(-m.exY, 0, u); s = lerp(m.sMin, 1, u); r = lerp(-m.rot, -3, u); o = clamp(u*1.3,0,1);
+    } else {                        // exiting center -> top-left
+      var e = ease(delta);
+      x = lerp(0, -m.exX, e); y = lerp(0, -m.exY, e); s = lerp(1, m.sMin, e); r = lerp(-3, m.rot, e); o = clamp((1-delta)*1.3,0,1);
+    }
+    return { x:x, y:y, s:s, r:r, o:o };
+  }
+
+  var vw, vh, m, total, lastActive = -1;
+  function measure(){
+    vw = window.innerWidth; vh = window.innerHeight; m = mags();
+    total = Math.max(1, showcase.offsetHeight - vh);
+  }
+
+  function render(){
+    var rect = showcase.getBoundingClientRect();
+    var p = clamp(-rect.top / total, 0, 1);
+    var c = p * (N - 1);
+
+    for (var i=0;i<N;i++){
+      var d = c - i;
+      var ad = Math.abs(d);
+
+      // background crossfade + subtle ken-burns
+      var bo = clamp(1 - ad, 0, 1);
+      bgs[i].style.opacity = bo;
+      bgs[i].style.transform = 'scale(' + (1.05 - 0.05*bo) + ')';
+
+      // shoe travel
+      var st = shoeState(d, m);
+      var px = st.x/100*vw, py = st.y/100*vh;
+      shoes[i].style.opacity = st.o;
+      shoes[i].style.transform =
+        'translate(calc(-50% + '+px+'px), calc(-50% + '+py+'px)) scale('+st.s+') rotate('+st.r+'deg)';
+      shoes[i].style.pointerEvents = st.o < .05 ? 'none' : 'auto';
+
+      // copy deck crossfade in place
+      var deo = clamp(1 - ad*1.8, 0, 1);
+      decks[i].style.opacity = deo;
+      decks[i].style.transform = reduced ? 'none' : 'translateY(' + (d*14) + 'px)';
+      decks[i].style.pointerEvents = deo < .3 ? 'none' : 'auto';
+    }
+
+    // persistent wordmarks drift (subtle parallax, they never leave)
+    if (!reduced){
+      wmR.style.transform = 'translateX(calc(-50% + ' + ((p-.5)* 46) + 'px))';
+      wmO.style.transform = 'translateX(calc(-50% + ' + ((p-.5)*-60) + 'px))';
+    }
+
+    // HUD active state
+    var active = clamp(Math.round(c), 0, N-1);
+    if (active !== lastActive){
+      for (var k=0;k<hudItems.length;k++){
+        hudItems[k].setAttribute('aria-current', k===active ? 'true' : 'false');
+      }
+      lastActive = active;
+    }
+  }
+
+  // rAF-throttled scroll (transforms/opacity only, GPU friendly)
+  var ticking = false;
+  function onScroll(){
+    if (!ticking){ ticking = true; requestAnimationFrame(function(){ render(); ticking = false; }); }
+  }
+  window.addEventListener('scroll', onScroll, { passive:true });
+  window.addEventListener('resize', function(){ measure(); render(); });
+
+  // click a HUD tick -> scroll to that slide
+  hudItems.forEach(function(item){
+    item.addEventListener('click', function(){
+      var i = parseInt(item.getAttribute('data-go'),10);
+      var target = showcase.offsetTop + (i/(N-1)) * total;
+      window.scrollTo({ top: target, behavior: reduced ? 'auto' : 'smooth' });
+    });
+  });
+
+  measure(); render();
+  // re-measure once fonts/images settle
+  window.addEventListener('load', function(){ measure(); render(); });
+
+  // ---- Reveal-on-scroll for lower sections (IntersectionObserver) ----
+  var reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window && !reduced){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { threshold:.18, rootMargin:'0px 0px -8% 0px' });
+    reveals.forEach(function(el){ io.observe(el); });
+  } else {
+    reveals.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  // ---- Size selector ----
+  document.querySelectorAll('.cta__sizes .size').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.cta__sizes .size').forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+      btn.setAttribute('aria-pressed','true');
+    });
+  });
+})();
+</script>
+</body>
+</html>
