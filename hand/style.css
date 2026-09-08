@@ -66,3 +66,28 @@
 body {
     font-family: "Pelak", sans-serif;
 }
+
+/* ===================== Sections ===================== */
+.section {
+    width: 100%;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#section1 {
+    background-image: url("assets/bc1.png");
+}
+
+#section2 {
+    background-image: url("assets/bc2.png");
+}
+
+#section3 {
+    background-image: url("assets/bc3.png");
+}
+
+#section4 {
+    background-image: url("assets/bc4.png");
+}
