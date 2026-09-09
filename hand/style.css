@@ -56,6 +56,64 @@
     font-display: swap;
 }
 
+/* PelakFA — Farsi variant (Persian digits) */
+@font-face {
+    font-family: "PelakFA";
+    src: url("Font/PelakFA-Thin.ttf") format("truetype");
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "PelakFA";
+    src: url("Font/PelakFA-light.ttf") format("truetype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "PelakFA";
+    src: url("Font/PelakFA-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "PelakFA";
+    src: url("Font/PelakFA-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "PelakFA";
+    src: url("Font/PelakFA-SemiBold.ttf") format("truetype");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "PelakFA";
+    src: url("Font/PelakFA-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "PelakFA";
+    src: url("Font/PelakFA-ExtraBold.ttf") format("truetype");
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "PelakFA";
+    src: url("Font/PelakFA-Black.ttf") format("truetype");
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* ===================== Responsive scale ===================== */
 /*
    The design is drawn for a 1440px-wide screen and every dimension below is
@@ -130,7 +188,7 @@ body {
 /* OMEGA wordmark: horizontally centered, 340px from top (1440 ref) */
 .omega {
     position: absolute;
-    top: 21.25rem;   /* 340 / 16 */
+    top: 25%;   /* 340 / 16 */
     left: 50%;
     transform: translateX(-50%);
     width: 78.125rem; /* 1250 / 16 */
@@ -140,7 +198,7 @@ body {
 /* ROCKMAN wordmark: 614px from top, 90px from the right edge (1440 ref) */
 .rockman {
     position: absolute;
-    top: 38.375rem;    /* 614 / 16 */
+    top: 55%;    
     right: 5.625rem;   /* 90 / 16 */
     width: 61.8125rem; /* 989 / 16 */
     height: auto;
@@ -153,6 +211,31 @@ body {
     left: 6.375rem;   /* 102 / 16 */
     width: 9.875rem;  /* 158 / 16 */
     height: auto;
+}
+
+/* Slide 1 hero text box: anchored bottom-right (90px right, 139px bottom) */
+.hero-text {
+    position: absolute;
+    right: 5.625rem;   /* 90 / 16 */
+    bottom: 6rem; /* 139 / 16 */
+    text-align: right;
+    z-index: 3; /* above the product shot (z-index 2) */
+}
+
+.hero-text h1 {
+    font-family: "PelakFA", sans-serif;
+    font-weight: 600;
+    font-size: 1.25rem; /* 20 / 16 */
+    color: #004F84;
+}
+
+.hero-text span {
+    display: block;
+    font-family: "PelakFA", sans-serif;
+    font-weight: 900;
+    font-size: 6.65625rem; /* 106.5 / 16 */
+    line-height: 7rem;
+    color: #ffffff;
 }
 
 /* ROCKMAN OMEGA product shot: centered both axes, above wordmarks & polygons */
