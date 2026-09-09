@@ -240,6 +240,48 @@ body {
     color: #ffffff;
 }
 
+/* Slide 1 feature list: 3 title/subtitle pairs in a row on the left */
+.features {
+    position: absolute;
+    top: 32.8125rem; /* 525 / 16 */
+    left: 6.25rem;   /* 100 / 16 */
+    display: flex;
+    flex-direction: column;
+    gap: 4.25rem;    /* 68 / 16 — spacing between pairs */
+    z-index: 3;      /* above the product shot (z-index 2) */
+}
+
+.feature-title {
+    font-family: "PelakFA", sans-serif;
+    font-weight: 700;
+    font-size: 1.59375rem; /* 25.5 / 16 */
+    color: #ffffff;
+}
+
+.feature-sub {
+    font-family: "PelakFA", sans-serif;
+    font-weight: 500;
+    font-size: 0.8880625rem; /* 14.21 / 16 */
+    color: rgba(255, 255, 255, 0.33);
+}
+
+/* Slide 2 intro: title + subtitle, placed where the slide 1 hero h1/tag sits */
+.intro {
+    position: absolute;
+    right: 5.625rem; /* 90 / 16 */
+    bottom: 3.75rem;
+    text-align: right;
+    z-index: 3; /* above the product shot (z-index 2) */
+}
+
+/* circle.svg glowing dot sits behind the subtitle's start */
+.intro .feature-sub {
+    background-image: url("assets/circle.svg");
+    background-repeat: no-repeat;
+    background-position: top right;
+    background-size: 1rem 1rem; /* 16 / 16 */
+}
+
 /* ROCKMAN OMEGA product shot: centered both axes, above wordmarks & polygons */
 .product {
     position: absolute;
