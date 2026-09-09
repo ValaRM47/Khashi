@@ -56,11 +56,38 @@
     font-display: swap;
 }
 
+/* ===================== Responsive scale ===================== */
+/*
+   The design is drawn for a 1440px-wide screen and every dimension below is
+   expressed in rem, relative to a 16px base:   rem = (1440-design px) / 16
+
+     - Desktop (>= 1440px):  1rem = 16px, so each rem value renders at its
+       exact design pixel size (e.g. 21.25rem = 340px).
+     - Below 1440px:         the root font-size shrinks with the viewport
+       (100vw / 90 = 16px at 1440px), so every rem-based dimension scales
+       down proportionally and the whole layout stays relative.
+*/
+html {
+    font-size: 16px;
+}
+
+@media (max-width: 1440px) {
+    html {
+        font-size: calc(100vw / 90);
+    }
+}
+
 /* ===================== Reset ===================== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html,
+body {
+    /* guard against any sub-pixel horizontal overflow from scaling */
+    overflow-x: hidden;
 }
 
 body {
@@ -69,11 +96,14 @@ body {
 
 /* ===================== Sections ===================== */
 .section {
+    position: relative;
     width: 100%;
     height: 100vh;
+    height: 100svh; /* stable against mobile browser toolbars */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    overflow: hidden;
 }
 
 #section1 {
@@ -90,4 +120,37 @@ body {
 
 #section4 {
     background-image: url("assets/bc4.png");
+}
+
+#section5 {
+    background-image: url("assets/bc5.png");
+}
+
+/* ===================== Section overlays ===================== */
+/* OMEGA wordmark: horizontally centered, 340px from top (1440 ref) */
+.omega {
+    position: absolute;
+    top: 21.25rem;   /* 340 / 16 */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 78.125rem; /* 1250 / 16 */
+    height: auto;
+}
+
+/* ROCKMAN wordmark: 614px from top, 90px from the right edge (1440 ref) */
+.rockman {
+    position: absolute;
+    top: 38.375rem;    /* 614 / 16 */
+    right: 5.625rem;   /* 90 / 16 */
+    width: 61.8125rem; /* 989 / 16 */
+    height: auto;
+}
+
+/* BORN TO CLIMB tagline: 287px from top, 102px from the left edge (1440 ref) */
+.born {
+    position: absolute;
+    top: 17.9375rem;  /* 287 / 16 */
+    left: 6.375rem;   /* 102 / 16 */
+    width: 9.875rem;  /* 158 / 16 */
+    height: auto;
 }
