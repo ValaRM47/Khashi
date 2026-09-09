@@ -154,3 +154,46 @@ body {
     width: 9.875rem;  /* 158 / 16 */
     height: auto;
 }
+
+/* ROCKMAN OMEGA product shot: centered both axes, above wordmarks & polygons */
+.product {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 85.375rem; /* 1366 / 16 */
+    height: auto;
+    z-index: 2;
+}
+
+/* Mountain line (section 1 only): horizontally centered, 180px from top (1440 ref) */
+.mountain {
+    position: absolute;
+    top: 11.25rem;    /* 180 / 16 */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 76.625rem; /* 1226 / 16 */
+    height: auto;
+}
+
+/* Scroll-nav polygons (sections 2-5 only): horizontally centered.
+   z-index 1 reserved for later scroll automation. */
+.polygon-up,
+.polygon-down {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 43.0625rem; /* 689 / 16 */
+    height: auto;
+    z-index: 1;
+}
+
+/* Polygon up: 78px from the top */
+.polygon-up {
+    top: 4.875rem; /* 78 / 16 */
+}
+
+/* Polygon down: 78px from the bottom */
+.polygon-down {
+    bottom: 4.875rem; /* 78 / 16 */
+}
