@@ -217,7 +217,8 @@ body {
 .hero-text {
     position: absolute;
     right: 5.625rem;   /* 90 / 16 */
-    bottom: 6rem; /* 139 / 16 */
+    bottom: 3.75rem; /* 5rem - 1.25rem: box is bottom-anchored, so drop it by the
+                        h1's margin-bottom to keep the h1 fixed and push the tagline down */
     text-align: right;
     z-index: 3; /* above the product shot (z-index 2) */
 }
@@ -227,6 +228,7 @@ body {
     font-weight: 600;
     font-size: 1.25rem; /* 20 / 16 */
     color: #004F84;
+    margin-bottom: 1.25rem; /* 20 / 16 */
 }
 
 .hero-text span {
@@ -252,7 +254,7 @@ body {
 /* Mountain line (section 1 only): horizontally centered, 180px from top (1440 ref) */
 .mountain {
     position: absolute;
-    top: 11.25rem;    /* 180 / 16 */
+    top: 9rem;    /* 180 / 16 */
     left: 50%;
     transform: translateX(-50%);
     width: 76.625rem; /* 1226 / 16 */
