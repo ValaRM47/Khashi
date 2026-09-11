@@ -144,8 +144,9 @@ html {
 
 html,
 body {
-    /* guard against any sub-pixel horizontal overflow from scaling */
-    overflow-x: hidden;
+    /* Clip horizontal overflow WITHOUT creating a scroll container,
+       so it doesn't break position: sticky on the scroll stage. */
+    overflow-x: clip;
 }
 
 body {
@@ -182,6 +183,47 @@ body {
 
 #section5 {
     background-image: url("assets/bc5.png");
+}
+
+/* ===================== Scroll stage: all slides pinned =====================
+   All five slides are stacked in one pinned viewport. The stage's extra height
+   (4 x 100vh) is the scroll distance that scrubs the 4 transitions (script.js). */
+.stage {
+    position: relative;
+    height: 2100vh; /* 4 transitions x 400vh + 4 holds x 100vh + 100vh pin (see script.js) */
+}
+
+.stage__pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+}
+
+/* Every slide overlaps inside the pinned viewport */
+.stage__pin > .section {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    will-change: opacity;
+}
+
+/* Earlier slides stack above later ones, so each dissolves to reveal the next */
+.stage__pin > #section1 { z-index: 5; }
+.stage__pin > #section2 { z-index: 4; }
+.stage__pin > #section3 { z-index: 3; }
+.stage__pin > #section4 { z-index: 2; }
+.stage__pin > #section5 { z-index: 1; }
+
+.stage__pin .product,
+.stage__pin .mountain,
+.stage__pin .hero-text,
+.stage__pin .features,
+.stage__pin .intro,
+.stage__pin .polygon-up,
+.stage__pin .polygon-down {
+    will-change: transform;
 }
 
 /* ===================== Section overlays ===================== */
@@ -269,17 +311,39 @@ body {
 .intro {
     position: absolute;
     right: 5.625rem; /* 90 / 16 */
-    bottom: 3.75rem;
+    bottom: 7rem;
     text-align: right;
     z-index: 3; /* above the product shot (z-index 2) */
+    width: 25%;
 }
 
-/* circle.svg glowing dot sits behind the subtitle's start */
-.intro .feature-sub {
-    background-image: url("assets/circle.svg");
-    background-repeat: no-repeat;
-    background-position: top right;
-    background-size: 1rem 1rem; /* 16 / 16 */
+/* Slide 3 variant: same block anchored to the top-right instead of bottom-right */
+.intro--top {
+    top: 7rem;
+    bottom: auto;
+}
+
+/* Slide 4 variant: same block anchored to the bottom-left */
+.intro--left {
+    left: 5.625rem; /* 90 / 16 */
+    right: auto;
+    text-align: left;
+}
+
+/* Slide 2 title — style independently from the slide 1 features */
+.intro-title {
+    font-family: "PelakFA", sans-serif;
+    font-weight: 700;
+    font-size: 3rem; /* 25.5 / 16 */
+    color: #ffffff;
+}
+
+/* Slide 2 subtitle — style independently from the slide 1 features */
+.intro-sub {
+    font-family: "PelakFA", sans-serif;
+    font-weight: 500;
+    font-size: 1.2rem; /* 14.21 / 16 */
+    color: rgba(255, 255, 255, 0.33);
 }
 
 /* ROCKMAN OMEGA product shot: centered both axes, above wordmarks & polygons */
@@ -323,4 +387,76 @@ body {
 /* Polygon down: 78px from the bottom */
 .polygon-down {
     bottom: 4.875rem; /* 78 / 16 */
+}
+
+/* ===================== Hero (slide 1) entrance animations =====================
+   Animate the independent `translate` property (not `transform`) so these compose
+   cleanly with the centering transforms on .omega / .mountain / .product. */
+@keyframes inFromTop {
+    from { opacity: 0; translate: 0 -4rem; }
+    to   { opacity: 1; translate: 0 0; }
+}
+@keyframes inFromBottom {
+    from { opacity: 0; translate: 0 4rem; }
+    to   { opacity: 1; translate: 0 0; }
+}
+@keyframes inFromLeft {
+    from { opacity: 0; translate: -4rem 0; }
+    to   { opacity: 1; translate: 0 0; }
+}
+@keyframes inFromRight {
+    from { opacity: 0; translate: 4rem 0; }
+    to   { opacity: 1; translate: 0 0; }
+}
+
+/* Shared timing — long duration + gentle ease-out for a very smooth glide */
+#section1 .product,
+#section1 .mountain,
+#section1 .omega,
+#section1 .born,
+#section1 .rockman,
+#section1 .hero-text,
+#section1 .feature {
+    animation-duration: 1.4s;
+    animation-timing-function: cubic-bezier(0.33, 1, 0.68, 1); /* easeOutCubic — gentle, even glide */
+    animation-fill-mode: both; /* hold the start state before, keep the end state after */
+}
+
+#section1 .product,
+#section1 .mountain  { animation-name: inFromTop; }
+
+#section1 .omega,
+#section1 .born      { animation-name: inFromLeft; }
+
+#section1 .rockman   { animation-name: inFromRight; }
+
+#section1 .hero-text { animation-name: inFromBottom; }
+
+/* Feature pairs slide in from the left */
+#section1 .feature { animation-name: inFromLeft; }
+
+/* Staggered cascade — every hero element enters one after another at the same
+   0.2s pace as the features, so nothing bursts in all at once. Duration/easing
+   stay identical for all, so the entrance speed matches everywhere. */
+#section1 .mountain,
+#section1 .product              { animation-delay: 0s; }
+#section1 .omega,
+#section1 .rockman,
+#section1 .born                 { animation-delay: 0.2s; }
+#section1 .hero-text            { animation-delay: 0.4s; }
+#section1 .feature:nth-child(1) { animation-delay: 0.6s; }
+#section1 .feature:nth-child(2) { animation-delay: 0.8s; }
+#section1 .feature:nth-child(3) { animation-delay: 1s; }
+
+/* Respect users who prefer reduced motion — show everything instantly */
+@media (prefers-reduced-motion: reduce) {
+    #section1 .product,
+    #section1 .mountain,
+    #section1 .omega,
+    #section1 .born,
+    #section1 .rockman,
+    #section1 .hero-text,
+    #section1 .feature {
+        animation: none;
+    }
 }
