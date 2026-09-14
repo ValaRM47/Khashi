@@ -170,4 +170,52 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', render);
     render();
+
+    /* Reveal-on-scroll for the post-deck sections (heritage + CTA) */
+    const revealEls = document.querySelectorAll('.reveal');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (revealEls.length && 'IntersectionObserver' in window && !reduceMotion) {
+        const io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+        revealEls.forEach(function (el) { io.observe(el); });
+    } else {
+        revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+    }
+
+    /* ------------------------------------------------------------------ *
+       Navbar smooth-scroll. Deck slides live inside the pinned stage, so
+       "products" scrolls to the stage offset that shows a product slide;
+       plain anchors (e.g. #story) use scrollIntoView.
+     * ------------------------------------------------------------------ */
+    const navScrollBehavior = reduceMotion ? 'auto' : 'smooth';
+
+    // Scroll the pinned deck so slide n (1..5) is the one on screen.
+    window.rockmanGoToSlide = function (n) {
+        const k = Math.max(0, n - 1); // target global progress g
+        const posUnits = k === 0 ? 0 : (k * TRANSITION_W) + ((k - 1) * HOLD_W) + (HOLD_W * 0.5);
+        const denom = stage.offsetHeight - window.innerHeight;
+        const y = stage.offsetTop + (posUnits / totalW) * denom;
+        window.scrollTo({ top: y, behavior: navScrollBehavior });
+    };
+
+    document.querySelectorAll('[data-scroll]').forEach(function (link) {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = link.getAttribute('data-scroll');
+            if (target === 'top') {
+                window.scrollTo({ top: 0, behavior: navScrollBehavior });
+            } else if (target === 'products') {
+                window.rockmanGoToSlide(2);
+            } else {
+                const el = document.querySelector(target);
+                if (el) el.scrollIntoView({ behavior: navScrollBehavior, block: 'start' });
+            }
+        });
+    });
 })();

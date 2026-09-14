@@ -460,3 +460,695 @@ body {
         animation: none;
     }
 }
+
+/* ===================== Brand heritage + CTA (post-deck sections) ===================== */
+/* These normal-scroll sections extend the deck's blue theme (white PelakFA, one
+   deep-blue accent). Desktop sizes follow the rem = px/16 system; a mobile query
+   overrides to readable px so text is not shrunk by the fluid root below 1440. */
+:root {
+    --brand-deep: #004F84;  /* deep blue accent (matches hero h1) */
+    --brand-lite: #66c6f5;  /* light brand blue, for small marks on dark blue */
+}
+
+.story,
+.cta {
+    position: relative;
+    width: 100%;
+    color: #ffffff;
+    font-family: "PelakFA", sans-serif;
+    direction: rtl;
+    overflow: hidden;
+}
+
+/* --- Heritage --- */
+.story {
+    background: linear-gradient(165deg, #05263f 0%, #0a4a7a 55%, #06304f 100%);
+    padding: 8.75rem 6.25rem; /* 140 / 100 */
+}
+
+/* decorative brand glow */
+.story::before {
+    content: "";
+    position: absolute;
+    top: -18%;
+    left: -8%;
+    width: 52%;
+    height: 68%;
+    background: radial-gradient(circle, rgba(102, 198, 245, 0.16), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.story__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 75rem; /* 1200 */
+    margin: 0 auto;
+}
+
+.story__head {
+    max-width: 46rem; /* 736 */
+    margin-bottom: 5.5rem; /* 88 */
+}
+
+.story__title {
+    font-weight: 900;
+    font-size: 4rem; /* 64 */
+    line-height: 1.15;
+}
+
+.story__lead {
+    font-weight: 500;
+    font-size: 1.375rem; /* 22 */
+    line-height: 1.9;
+    color: rgba(255, 255, 255, 0.66);
+    margin-top: 1.5rem; /* 24 */
+    max-width: 38rem;
+}
+
+/* --- Heritage chapters: split text + two-image art collage (alternating) --- */
+.chapter {
+    display: flex;
+    align-items: center;
+    gap: 4.5rem; /* 72 */
+}
+
+.chapter + .chapter {
+    margin-top: 6rem; /* 96 */
+}
+
+.chapter--father { flex-direction: row-reverse; } /* photo on the right */
+.chapter--son    { flex-direction: row; }         /* photo on the left */
+
+.chapter__text { flex: 1 1 44%; }
+.chapter__media { flex: 1 1 56%; }
+
+.chapter__mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    font-weight: 700;
+    font-size: 1rem; /* 16 */
+    letter-spacing: 0.08em;
+    color: var(--brand-lite);
+    margin-bottom: 1.25rem;
+}
+
+.chapter__mark::before {
+    content: "";
+    width: 2.75rem; /* 44 */
+    height: 2px;
+    border-radius: 2px;
+    background: var(--brand-lite);
+}
+
+.chapter__title {
+    font-weight: 900;
+    font-size: 2.5rem; /* 40 */
+    line-height: 1.2;
+    margin-bottom: 1.25rem;
+}
+
+.chapter__desc {
+    font-weight: 500;
+    font-size: 1.1875rem; /* 19 */
+    line-height: 2;
+    color: rgba(255, 255, 255, 0.74);
+    max-width: 30rem;
+}
+
+/* art collage: large primary + small secondary overlapping its corner */
+.collage {
+    position: relative;
+    width: 100%;
+}
+
+.collage__primary {
+    display: block;
+    width: 84%;
+    margin-inline-start: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 1.5rem; /* 24 */
+    box-shadow: 0 2.25rem 5rem rgba(3, 20, 36, 0.55);
+}
+
+.collage__secondary {
+    position: absolute;
+    bottom: 1.5rem;
+    inset-inline-start: 0;
+    width: 46%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 1.25rem; /* 20 */
+    border: 6px solid #06304f; /* separates it from the primary */
+    box-shadow: 0 1.75rem 3.5rem rgba(3, 20, 36, 0.5);
+}
+
+/* --- CTA: centered message + fanned image trio --- */
+.cta {
+    background: radial-gradient(120% 100% at 50% 0%, #1477b8 0%, #0a4c82 45%, #052a45 100%);
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 1.5rem;
+}
+
+/* soft brand glow */
+.cta::before {
+    content: "";
+    position: absolute;
+    width: 42rem;
+    height: 42rem;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(102, 198, 245, 0.22), transparent 62%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.cta__inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 62rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.75rem;
+}
+
+.cta__logo {
+    width: 9rem; /* 144 */
+    height: auto;
+}
+
+.cta__title {
+    font-weight: 900;
+    font-size: 3.5rem; /* 56 */
+    line-height: 1.18;
+    max-width: 40rem;
+}
+
+.cta__hl {
+    color: var(--brand-lite);
+}
+
+.cta__sub {
+    font-weight: 500;
+    font-size: 1.25rem; /* 20 */
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.78);
+    max-width: 32rem;
+}
+
+.cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.cta__proof {
+    font-weight: 600;
+    font-size: 0.9375rem; /* 15 */
+    color: rgba(255, 255, 255, 0.58);
+}
+
+.cta__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.25rem; /* >= 44px touch target */
+    padding: 1rem 2.75rem; /* 16 / 44 */
+    background: #ffffff;
+    color: var(--brand-deep);
+    font-family: "PelakFA", sans-serif;
+    font-weight: 700;
+    font-size: 1.125rem; /* 18 */
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 0.75rem 2rem rgba(3, 20, 36, 0.35);
+}
+
+.cta__btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 1.25rem 2.75rem rgba(3, 20, 36, 0.45);
+}
+
+.cta__btn:active {
+    transform: translateY(0);
+}
+
+.cta__btn:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
+}
+
+/* Secondary action (shoe repairs): translucent glass button */
+.cta__btn--ghost {
+    background: rgba(255, 255, 255, 0.10);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.38);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    box-shadow: none;
+}
+
+.cta__btn--ghost:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.75);
+    box-shadow: none;
+}
+
+/* fanned image trio (opens on scroll-in) */
+.cta__fan {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    max-width: 46rem;
+    margin-top: 1.5rem;
+}
+
+.fan__card {
+    position: relative;
+    width: 38%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 1rem; /* 16 */
+    outline: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 1.75rem 4rem rgba(3, 20, 36, 0.5);
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fan__card img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* stacked flat before the section enters the viewport */
+.fan__card--1 { z-index: 1; margin-inline-end: -2rem; transform: rotate(0deg) translateY(1rem); }
+.fan__card--2 { z-index: 2; width: 42%; transform: translateY(0); }
+.fan__card--3 { z-index: 1; margin-inline-start: -2rem; transform: rotate(0deg) translateY(1rem); }
+
+/* fanned out once in view */
+.cta__fan.is-visible .fan__card--1 { transform: rotate(-6deg) translateY(1.5rem); }
+.cta__fan.is-visible .fan__card--2 { transform: translateY(-0.5rem); }
+.cta__fan.is-visible .fan__card--3 { transform: rotate(6deg) translateY(1.5rem); }
+
+@media (prefers-reduced-motion: reduce) {
+    .fan__card { transition: none; }
+}
+
+/* Solid fallback where translucency is unwanted / unsupported */
+@media (prefers-reduced-transparency: reduce) {
+    .cta__btn--ghost { background: rgba(255, 255, 255, 0.16); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+
+/* ===================== Footer ===================== */
+.footer {
+    background: #041d30;
+    color: #ffffff;
+    direction: rtl;
+    font-family: "PelakFA", sans-serif;
+    padding: 5rem 6.25rem 2.25rem; /* 80 / 100 / 36 */
+}
+
+.footer__inner {
+    max-width: 75rem; /* 1200 */
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1.4fr;
+    gap: 3rem;
+    align-items: start;
+}
+
+.footer__logo {
+    display: block;
+    width: 9.375rem; /* 150 */
+    height: auto;
+}
+
+.footer__tag {
+    margin-top: 1.25rem;
+    font-size: 1rem; /* 16 */
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.footer__h {
+    font-weight: 700;
+    font-size: 1.0625rem; /* 17 */
+    margin-bottom: 1.25rem;
+    color: #ffffff;
+}
+
+.footer__col a {
+    display: block;
+    color: rgba(255, 255, 255, 0.62);
+    text-decoration: none;
+    font-size: 1rem; /* 16 */
+    font-weight: 500;
+    padding: 0.4rem 0;
+    transition: color 0.2s ease;
+}
+
+.footer__col a:hover {
+    color: #ffffff;
+}
+
+.footer__col a:focus-visible {
+    outline: 2px solid var(--brand-lite);
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+.footer__addr {
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 1rem; /* 16 */
+    font-weight: 500;
+    line-height: 2;
+}
+
+.footer__bar {
+    max-width: 75rem;
+    margin: 3.5rem auto 0;
+    padding-top: 1.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    text-align: center;
+    font-size: 0.875rem; /* 14 */
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* --- Reveal-on-scroll (both sections) --- */
+.reveal {
+    opacity: 0;
+    transform: translateY(1.5rem);
+    filter: blur(6px);
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                filter 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    filter: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal {
+        opacity: 1;
+        transform: none;
+        filter: none;
+        transition: none;
+    }
+}
+
+/* --- Mobile: stack + readable px sizes (independent of the fluid root) --- */
+@media (max-width: 768px) {
+    .story {
+        padding: 56px 20px;
+    }
+    .story__head {
+        margin-bottom: 40px;
+    }
+    .story__title {
+        font-size: 34px;
+    }
+    .story__lead {
+        font-size: 16px;
+        line-height: 1.9;
+    }
+    .chapter,
+    .chapter--father,
+    .chapter--son {
+        flex-direction: column;
+        gap: 24px;
+        text-align: right;
+    }
+    .chapter + .chapter {
+        margin-top: 48px;
+    }
+    .chapter__text,
+    .chapter__media {
+        flex: none;
+        width: 100%;
+    }
+    .chapter__mark {
+        font-size: 13px;
+    }
+    .chapter__title {
+        font-size: 26px;
+    }
+    .chapter__desc {
+        font-size: 16px;
+        line-height: 1.9;
+        max-width: none;
+    }
+    .collage__primary {
+        width: 80%;
+    }
+    .collage__secondary {
+        width: 42%;
+        border-width: 4px;
+    }
+    .cta {
+        padding: 56px 20px;
+    }
+    .cta__inner {
+        gap: 18px;
+    }
+    .cta__title {
+        font-size: 32px;
+    }
+    .cta__sub {
+        font-size: 16px;
+    }
+    .cta__btn {
+        font-size: 16px;
+        padding: 15px 30px;
+    }
+    .cta__logo {
+        width: 120px;
+    }
+    .cta__actions {
+        gap: 12px;
+    }
+    .cta__proof {
+        font-size: 13px;
+    }
+    .cta__fan {
+        max-width: 340px;
+        margin-top: 8px;
+    }
+    .fan__card--1 { margin-inline-end: -1.25rem; }
+    .fan__card--3 { margin-inline-start: -1.25rem; }
+
+    /* Footer */
+    .footer {
+        padding: 3rem 1.5rem 1.5rem;
+    }
+    .footer__inner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+    .footer__logo {
+        width: 128px;
+    }
+    .footer__h {
+        font-size: 16px;
+    }
+    .footer__tag,
+    .footer__col a,
+    .footer__addr {
+        font-size: 15px;
+    }
+    .footer__bar {
+        margin-top: 2.5rem;
+        font-size: 13px;
+    }
+}
+
+/* ===================== Navbar =====================
+   Fixed 80px chrome. Uses px (not the fluid rem root) so it stays 80px
+   at every width. RTL: logo at the start (right), call button at the end (left). */
+.nav {
+    position: fixed;
+    top: 0;
+    inset-inline: 0;
+    z-index: 1000;
+    height: 80px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 0 40px;
+    direction: rtl;
+    font-family: "PelakFA", sans-serif;
+    background: linear-gradient(to bottom, rgba(4, 20, 36, 0.72), rgba(4, 20, 36, 0));
+}
+
+.nav__logo {
+    justify-self: start; /* right in RTL */
+    display: inline-flex;
+    align-items: center;
+}
+
+.nav__logo img {
+    height: 44px;
+    width: auto;
+    display: block;
+}
+
+.nav__menu {
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.nav__link {
+    color: rgba(255, 255, 255, 0.82);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 17px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.nav__link:hover {
+    color: #ffffff;
+}
+
+.nav__link:focus-visible {
+    outline: 2px solid var(--brand-lite);
+    outline-offset: 4px;
+    border-radius: 2px;
+}
+
+.nav__call {
+    justify-self: end; /* left in RTL */
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 22px;
+    background: #ffffff;
+    color: var(--brand-deep);
+    font-weight: 700;
+    font-size: 17px;
+    text-decoration: none;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(3, 20, 36, 0.3);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+}
+
+.nav__call:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 30px rgba(3, 20, 36, 0.42);
+}
+
+.nav__call:active {
+    transform: translateY(0);
+}
+
+.nav__call:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
+}
+
+.nav__call-icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* leave room for the fixed navbar when jumping to an anchored section */
+#story {
+    scroll-margin-top: 80px;
+}
+
+@media (max-width: 768px) {
+    .nav {
+        padding: 0 20px;
+    }
+    .nav__menu {
+        gap: 22px;
+    }
+    .nav__link {
+        font-size: 15px;
+    }
+    .nav__call {
+        font-size: 15px;
+        padding: 0 18px;
+    }
+}
+
+@media (max-width: 600px) {
+    .nav__menu {
+        display: none; /* logo + call only on small screens */
+    }
+}
+
+/* ===================== Mobile deck optimization =====================
+   Desktop is untouched. The pinned deck is sized in rem (fluid root), which
+   shrinks all text to an unreadable miniature on phones. These overrides give
+   the deck's TEXT readable px sizes and reposition the cramped clusters.
+   Wordmarks / product / polygons keep their scaled sizes (already ~full-width). */
+@media (max-width: 768px) {
+    /* Hero subhead + display tagline (slide 1) */
+    #section1 .hero-text {
+        right: 22px;
+        bottom: 26px;
+    }
+    #section1 .hero-text h1 {
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+    #section1 .hero-text span {
+        font-size: 26px;
+        line-height: 1.25;
+    }
+
+    /* Feature points: readable + moved clear of the wordmarks, over the shoe */
+    #section1 .features {
+        top: auto;
+        bottom: 118px;
+        left: 22px;
+        gap: 14px;
+        text-shadow: 0 1px 10px rgba(3, 20, 36, 0.55); /* legible over the photo */
+    }
+    .feature-title {
+        font-size: 14px;
+    }
+    .feature-sub {
+        font-size: 11px;
+    }
+
+    /* Intro text (slides 2-5): readable + a wider column, clear of the navbar */
+    .intro {
+        width: 74%;
+        text-shadow: 0 1px 12px rgba(3, 20, 36, 0.5);
+    }
+    .intro-title {
+        font-size: 21px;
+    }
+    .intro-sub {
+        font-size: 14px;
+        line-height: 1.85;
+    }
+    .intro--top {
+        top: 96px; /* below the 80px fixed navbar */
+    }
+}
