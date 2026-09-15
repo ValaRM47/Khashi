@@ -357,6 +357,11 @@ body {
     z-index: 2;
 }
 
+/* Slides 3 & 4 use images where the shoe sits smaller inside the frame; scale
+   them up so every product reads as large as the hero shoe (omega 1 / omega 4). */
+#section3 .product { transform: translate(-50%, -50%) scale(1.26); }
+#section4 .product { transform: translate(-50%, -50%) scale(1.30); }
+
 /* Mountain line (section 1 only): horizontally centered, 180px from top (1440 ref) */
 .mountain {
     position: absolute;
@@ -1107,24 +1112,26 @@ body {
    the deck's TEXT readable px sizes and reposition the cramped clusters.
    Wordmarks / product / polygons keep their scaled sizes (already ~full-width). */
 @media (max-width: 768px) {
-    /* Hero subhead + display tagline (slide 1) */
+    /* Hero subhead + display tagline (slide 1): raised + enlarged on mobile */
     #section1 .hero-text {
         right: 22px;
-        bottom: 26px;
+        bottom: 96px;
     }
     #section1 .hero-text h1 {
-        font-size: 13px;
-        margin-bottom: 6px;
+        font-size: 15px;
+        margin-bottom: 8px;
     }
     #section1 .hero-text span {
-        font-size: 26px;
-        line-height: 1.25;
+        font-size: 30px;
+        line-height: 1.2;
     }
 
-    /* Feature points: readable + moved clear of the wordmarks, over the shoe */
+    /* Feature points: brought back down so their top lines up with the
+       headline's top (headline: bottom 96 + ~113 tall; features ~136 tall,
+       so bottom 73 makes both tops sit at the same line). */
     #section1 .features {
         top: auto;
-        bottom: 118px;
+        bottom: 62px;
         left: 22px;
         gap: 14px;
         text-shadow: 0 1px 10px rgba(3, 20, 36, 0.55); /* legible over the photo */
@@ -1151,4 +1158,22 @@ body {
     .intro--top {
         top: 96px; /* below the 80px fixed navbar */
     }
+
+    /* Bigger "born to climb" tag, kept clear of the navbar */
+    .born {
+        width: 150px;
+        top: 100px;
+        left: 22px;
+    }
+
+    /* Bring the OMEGA / ROCKMAN wordmarks closer together */
+    .omega { top: 30%; }
+    .rockman { top: 45%; }
+
+    /* Larger, more immersive product shot */
+    .product { width: 115vw; }
+
+    /* No polygon shutter on mobile */
+    .polygon-up,
+    .polygon-down { display: none; }
 }
