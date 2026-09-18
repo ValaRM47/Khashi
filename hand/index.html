@@ -6,7 +6,7 @@
 
     <title>عنوان وب‌سایت</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=5">
 </head>
 
 <body>
@@ -16,10 +16,19 @@
         <a class="nav__logo" href="#" data-scroll="top" aria-label="راکمن، خانه">
             <img src="assets/logo-rockman.png" alt="راکمن">
         </a>
-        <nav class="nav__menu" aria-label="ناوبری اصلی">
+        <button class="nav__toggle" type="button" aria-label="باز کردن منو" aria-expanded="false" aria-controls="navMenu">
+            <span class="nav__toggle-bar"></span>
+            <span class="nav__toggle-bar"></span>
+            <span class="nav__toggle-bar"></span>
+        </button>
+        <nav class="nav__menu" id="navMenu" aria-label="ناوبری اصلی">
             <a class="nav__link" href="#" data-scroll="top">خانه</a>
-            <a class="nav__link" href="#" data-scroll="products">محصولات</a>
-            <a class="nav__link" href="#story" data-scroll="#story">داستان ما</a>
+            <a class="nav__link" href="#" data-scroll="slide:2">طراحی</a>
+            <a class="nav__link" href="#" data-scroll="slide:3">زیره وارداتی</a>
+            <a class="nav__link" href="#" data-scroll="slide:4">لبه گیری</a>
+            <a class="nav__link" href="#" data-scroll="slide:5">پایداری قوس</a>
+            <a class="nav__link" href="#story" data-scroll="#story">تاریخچه</a>
+            <a class="nav__link" href="#cta" data-scroll="#cta">تعمیرات و خرید</a>
         </nav>
         <!-- TODO: replace with the real phone number -->
         <a class="nav__call" href="tel:+982112345678">
@@ -71,7 +80,7 @@
         <img src="assets/rockman%20omega%201.png" alt="ROCKMAN OMEGA" class="product">
         <div class="intro">
             <div class="intro-title">طراحی به روز و مدرن</div>
-            <div class="intro-sub">الهام گرفته از </div>
+            <div class="intro-sub">تلفیق ۴۰ سال تجربه و طراحی روز ایتالیا؛ راک‌من پس از تست‌های متفاوت، بر اساس ارگونومی پای ایرانی بومی‌سازی شده تا اوج دقت روی گیره‌ها و راحتی در تمرین را تجربه کنید.</div>
         </div>
     </section>
 
@@ -84,8 +93,8 @@
         <img src="assets/Polygon%20down.png" alt="" class="polygon-down">
         <img src="assets/rockman%20omega%202.png" alt="ROCKMAN OMEGA" class="product">
         <div class="intro intro--top">
-            <div class="intro-title">طراحی به روز و مدرن</div>
-            <div class="intro-sub">لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم</div>
+            <div class="intro-title">زیره وارداتی و اختصاصی</div>
+            <div class="intro-sub">زیره وارداتی و اختصاصی راک‌من با تعادلِ ایده‌آل میان چسبندگی و ماندگاری؛ طراحی دوتکه آن با ایجاد فرمی تهاجمی، نهایت انعطاف و کنترل را در شیب‌های تند تضمین می‌کند.</div>
         </div>
     </section>
 
@@ -98,7 +107,7 @@
         <img src="assets/Polygon%20down.png" alt="" class="polygon-down">
         <img src="assets/rockman%20omega%203.png" alt="ROCKMAN OMEGA" class="product">
         <div class="intro intro--left">
-            <div class="intro-title">طراحی به روز و مدرن</div>
+            <div class="intro-title">لبه گیری دقیق، پاشنه بی همتا</div>
             <div class="intro-sub">لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم</div>
         </div>
     </section>
@@ -112,8 +121,8 @@
         <img src="assets/Polygon%20down.png" alt="" class="polygon-down">
         <img src="assets/rockman%20omega%204.png" alt="ROCKMAN OMEGA" class="product">
         <div class="intro">
-            <div class="intro-title">طراحی به روز و مدرن</div>
-            <div class="intro-sub">لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم لورم ایپسوم</div>
+            <div class="intro-title">سیستم Dynamic Tension Band</div>
+            <div class="intro-sub">مجهز به نوار کشسان جلو به عقب برای حفظ دائمی قوس کفش؛ این تکنولوژی فرم تهاجمی اولیه را در استفاده‌های طولانی‌مدت ثابت نگه می‌دارد و انرژی پا را مستقیماً به پنجه منتقل می‌کند.</div>
         </div>
     </section>
 
@@ -125,14 +134,16 @@
         <div class="story__inner">
             <header class="story__head reveal">
                 <h2 class="story__title">از پدر، به پسر</h2>
-                <p class="story__lead">راکمن با عشق یک مرد به کوه آغاز شد و امروز، با همان عشق، در دستان نسلی تازه ادامه دارد.</p>
+                <p class="story__lead">داستان راک‌من از سال‌های دور آغاز می‌شود و امروز، با همان عشق، در دستان نسلی تازه ادامه دارد.</p>
             </header>
 
             <article class="chapter chapter--father reveal">
                 <div class="chapter__text">
                     <span class="chapter__mark">دیروز</span>
-                    <h3 class="chapter__title">بنیان‌گذار</h3>
-                    <p class="chapter__desc">نخستین کفش‌های سنگنوردی راکمن در کارگاه کوچک پدر، جفت‌به‌جفت و با دست ساخته شد. هر جفت، حاصل سال‌ها شناخت کوه و احترام به آن بود.</p>
+                    <h3 class="chapter__title">بنادک</h3>
+                    <p class="chapter__desc">داستان راک‌من ریشه در دهه‌های ۶۰ و ۷۰ دارد؛ زمانی که پدر، در کنار کوهنوردان و سنگ‌نوردان برجسته‌ای چون فریدون اسماعیل‌زاده و حمید روحانی، در صعودها و گشایش مسیر تاریخی «همدانی‌ها» در علم‌کوه نقش داشت.
+
+تجربه عمیق او در سنگ‌نوردی، در کنار سال‌ها آموزش کفاشی، به ترکیبی منحصربه‌فرد از دانش و مهارت تبدیل شد. حاصل این تجربه، تأسیس برند «بنادک» همراه با برادرش و تولید نخستین کتانی سنگ‌نوردی بومی ایران بود؛ میراثی که همچنان بخشی از تاریخ سنگ‌نوردی ایران به شمار می‌رود.</p>
                 </div>
                 <div class="chapter__media">
                     <div class="collage">
@@ -147,8 +158,8 @@
             <article class="chapter chapter--son reveal">
                 <div class="chapter__text">
                     <span class="chapter__mark">امروز</span>
-                    <h3 class="chapter__title">نسل تازه</h3>
-                    <p class="chapter__desc">امروز همان مسیر با ابزار و طراحی امروزی ادامه دارد. OMEGA بازتاب مدرن آن میراث است؛ سبک‌تر، دقیق‌تر و آماده‌ی سخت‌ترین صعودها.</p>
+                    <h3 class="chapter__title">راک‌من</h3>
+                    <p class="chapter__desc"> ترکیب دانش فنی کفاشی و شناخت عمیق از نیاز سنگ‌نوردان باعث شد تا او همراه با برادرش بنیان‌گذار برند نام‌آشنای «بنادک» شود و برای نخستین بار در تاریخ ایران، کتانی سنگ‌نوردی بومی را تولید کند؛ میراثی گران‌بها از تجربه و اصالت که همواره در جامعه کوهنوردی ایران زنده ماند.</p>
                 </div>
                 <div class="chapter__media">
                     <div class="collage">
@@ -166,7 +177,7 @@
     <section class="cta" id="cta">
         <div class="cta__inner reveal">
             <img src="assets/logo-rockman.png" alt="راکمن" class="cta__logo">
-            <h2 class="cta__title">قدم بعدی را با <span class="cta__hl">OMEGA</span> بردار</h2>
+            <h2 class="cta__title">صعود را با <br><span class="cta__hl">ROCKMAN</span> تجربه کن</h2>
             <p class="cta__sub">کفشی که پا‌به‌پای بلندپروازی‌ات بالا می‌آید.</p>
             <div class="cta__actions">
                 <a class="cta__btn" href="#">سفارش OMEGA</a>
@@ -205,6 +216,6 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=4"></script>
 </body>
 </html>

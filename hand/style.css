@@ -1011,7 +1011,7 @@ body {
 }
 
 .nav__logo img {
-    height: 44px;
+    height: 60px;
     width: auto;
     display: block;
 }
@@ -1020,16 +1020,59 @@ body {
     justify-self: center;
     display: flex;
     align-items: center;
-    gap: 40px;
+    gap: 24px;
 }
 
 .nav__link {
     color: rgba(255, 255, 255, 0.82);
     text-decoration: none;
     font-weight: 600;
-    font-size: 17px;
+    font-size: 16px;
+    white-space: nowrap;
     cursor: pointer;
     transition: color 0.2s ease;
+}
+
+/* Hamburger toggle — hidden on desktop, shown at <=1024px */
+.nav__toggle {
+    justify-self: end;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.nav__toggle-bar {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: #ffffff;
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+.nav--open .nav__toggle-bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.nav--open .nav__toggle-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.nav--open .nav__toggle-bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+.nav__toggle:focus-visible {
+    outline: 2px solid var(--brand-lite);
+    outline-offset: 2px;
+    border-radius: 4px;
 }
 
 .nav__link:hover {
@@ -1080,29 +1123,82 @@ body {
 }
 
 /* leave room for the fixed navbar when jumping to an anchored section */
-#story {
+#story,
+#cta {
     scroll-margin-top: 80px;
 }
 
-@media (max-width: 768px) {
+/* ---- Hamburger mode: 7-item bar collapses to a dropdown at <=1024px ---- */
+@media (max-width: 1024px) {
     .nav {
+        display: flex;
+        justify-content: space-between;
         padding: 0 20px;
     }
-    .nav__menu {
-        gap: 22px;
-    }
-    .nav__link {
-        font-size: 15px;
+    /* keep the top-bar chrome above the full-page overlay */
+    .nav__logo {
+        order: 0;
+        position: relative;
+        z-index: 2;
     }
     .nav__call {
+        order: 1;
+        position: relative;
+        z-index: 2;
         font-size: 15px;
         padding: 0 18px;
     }
+    .nav__toggle {
+        order: 2;
+        position: relative;
+        z-index: 2;
+        display: inline-flex;
+    }
+    /* full-page overlay menu */
+    .nav__menu {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        box-sizing: border-box;
+        flex-direction: column;
+        justify-content: center;
+        align-items: stretch;
+        gap: 0;
+        padding: 96px 0 32px;
+        background: rgba(4, 20, 36, 0.98);
+        -webkit-backdrop-filter: blur(16px);
+        backdrop-filter: blur(16px);
+        overflow-y: auto;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px);
+        /* fade out, then flip visibility off after the fade */
+        transition: opacity 0.28s ease, transform 0.28s ease, visibility 0s linear 0.28s;
+    }
+    .nav--open .nav__menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        /* become visible immediately, then fade in */
+        transition: opacity 0.28s ease, transform 0.28s ease, visibility 0s;
+    }
+    .nav__link {
+        padding: 18px 26px;
+        font-size: 19px;
+        text-align: right;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .nav__link:last-child {
+        border-bottom: none;
+    }
 }
 
-@media (max-width: 600px) {
-    .nav__menu {
-        display: none; /* logo + call only on small screens */
+@media (max-width: 768px) {
+    .nav__logo img {
+        height: 48px;
     }
 }
 
@@ -1155,8 +1251,15 @@ body {
         font-size: 14px;
         line-height: 1.85;
     }
+    /* On mobile, slides 3-5 intro sit where slide 2's does (bottom-right base) */
     .intro--top {
-        top: 96px; /* below the 80px fixed navbar */
+        top: auto;
+        bottom: 7rem;
+    }
+    .intro--left {
+        left: auto;
+        right: 5.625rem; /* 90 / 16, same as base .intro */
+        text-align: right;
     }
 
     /* Bigger "born to climb" tag, kept clear of the navbar */

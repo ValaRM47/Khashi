@@ -204,6 +204,35 @@
         window.scrollTo({ top: y, behavior: navScrollBehavior });
     };
 
+    // Mobile hamburger: toggle the dropdown menu.
+    const nav = document.querySelector('.nav');
+    const navToggle = document.querySelector('.nav__toggle');
+    const navMenu = document.getElementById('navMenu');
+    function closeMenu() {
+        if (!nav) return;
+        nav.classList.remove('nav--open');
+        document.body.style.overflow = ''; // release the background scroll lock
+        if (navToggle) {
+            navToggle.setAttribute('aria-expanded', 'false');
+            navToggle.setAttribute('aria-label', 'باز کردن منو');
+        }
+    }
+    if (navToggle && nav) {
+        navToggle.addEventListener('click', function () {
+            const open = nav.classList.toggle('nav--open');
+            document.body.style.overflow = open ? 'hidden' : ''; // lock page behind the full-screen menu
+            navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            navToggle.setAttribute('aria-label', open ? 'بستن منو' : 'باز کردن منو');
+        });
+        // Close when tapping outside the menu.
+        document.addEventListener('click', function (e) {
+            if (nav.classList.contains('nav--open') && !nav.contains(e.target)) closeMenu();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeMenu();
+        });
+    }
+
     document.querySelectorAll('[data-scroll]').forEach(function (link) {
         link.addEventListener('click', function (e) {
             e.preventDefault();
@@ -212,10 +241,13 @@
                 window.scrollTo({ top: 0, behavior: navScrollBehavior });
             } else if (target === 'products') {
                 window.rockmanGoToSlide(2);
+            } else if (target.indexOf('slide:') === 0) {
+                window.rockmanGoToSlide(parseInt(target.slice(6), 10));
             } else {
                 const el = document.querySelector(target);
                 if (el) el.scrollIntoView({ behavior: navScrollBehavior, block: 'start' });
             }
+            closeMenu(); // collapse the mobile menu after choosing
         });
     });
 })();
