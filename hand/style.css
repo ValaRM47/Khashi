@@ -147,6 +147,9 @@ body {
     /* Clip horizontal overflow WITHOUT creating a scroll container,
        so it doesn't break position: sticky on the scroll stage. */
     overflow-x: clip;
+    /* Dark base so no white shows through a viewport-unit gap or the
+       mobile over-scroll (rubber-band) bounce. */
+    background: #041d30;
 }
 
 body {
@@ -158,7 +161,7 @@ body {
     position: relative;
     width: 100%;
     height: 100vh;
-    height: 100svh; /* stable against mobile browser toolbars */
+    height: 100dvh; /* dynamic vh: tracks the mobile toolbar so no white gap appears */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -197,7 +200,7 @@ body {
     position: sticky;
     top: 0;
     height: 100vh;
-    height: 100svh;
+    height: 100dvh;
     overflow: hidden;
 }
 
