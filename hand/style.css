@@ -1211,6 +1211,15 @@ body {
    the deck's TEXT readable px sizes and reposition the cramped clusters.
    Wordmarks / product / polygons keep their scaled sizes (already ~full-width). */
 @media (max-width: 768px) {
+    /* Scroll speed: the desktop deck needs ~2100vh of scroll (≈5 screens per
+       slide), which feels painfully slow on a phone. Shrink the stage so the
+       pinned deck scrubs at ~1 screen per slide — the same 1:1 pace as the
+       normal sections below. script.js reads stage.offsetHeight live, so the
+       whole phase timeline (and the nav "products" jump) rescales automatically. */
+    .stage {
+        height: 500vh; /* scrub range 400vh = ~100vh (1 screen) per slide transition */
+    }
+
     /* Hero subhead + display tagline (slide 1): raised + enlarged on mobile */
     #section1 .hero-text {
         right: 22px;
